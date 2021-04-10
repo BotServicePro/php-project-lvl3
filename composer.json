@@ -1,8 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "hexlet/code",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Third project from Hexlet - Web page analyze for SEO by Alexander Karakin",
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
