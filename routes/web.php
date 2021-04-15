@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (Request $request) {
+
+    $params = ['url' => [], 'errors' => [], 'messages' => []];
+    return view('main', $params);
 });
+
+Route::post('/postUrl', function (Request $request) {
+    $url = $request['url']['name'];
+    $errors = '';
+    $params = ['messages' => flash('Url was added!')->success(), 'errors' => []];
+    return view('main', $params);
+})->name('postUrl');
+
+
