@@ -22,7 +22,8 @@ Route::get('/', function (Request $request) { // главная страница
 })->name('main');
 
 
-function getHostFromUrl($url) { // функция получения только домена из линка
+function getHostFromUrl($url): string
+{ // функция получения только домена из линка
     $parsedUrl = parse_url($url);
     if (isset($parsedUrl['host'])) {
         return $parsedUrl['host'];
@@ -30,7 +31,8 @@ function getHostFromUrl($url) { // функция получения тольк�
     echo 'ERROR FROM FUNCTION getHostFromUrl';
 }
 
-function getSchemeFromUrl($url) { // функция получения только протокола из линка
+function getSchemeFromUrl($url): string
+{ // функция получения только протокола из линка
     $parsedUrl = parse_url($url);
     if (isset($parsedUrl['scheme'])) {
         return $parsedUrl['scheme'];
