@@ -23,10 +23,10 @@
 
 
 @section('url_input_form')
-    <form action="/postUrl" method="post">
+    <form action="/" method="post">
         @csrf
         <label>
-            <input type="text" name="url[name]" value="{{-- {{ $url['name'] }} --}}">
+            <input type="text" placeholder="https://example.com" name="url[name]" value="{{-- {{ $url['name'] }} --}}">
         </label>
 {{--        <?php if (isset($errors['description'])): ?>--}}
 {{--        <div><b><?= $errors['description'] ?></b></div>--}}
