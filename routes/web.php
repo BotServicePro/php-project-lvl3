@@ -23,24 +23,19 @@ Route::get('/', function (Request $request) { // главная страница
     return view('main', $params);
 })->name('main');
 
-//
-//Route::get('/urls/{id}', function ($id) { // инфа о единичном урле c редактированием и так далее
-//    echo 'Sinle url page';
-//    exit;
-//    $params = ['url' => [], 'messages' => []];
-//    return view('main', $params);
-//})->name('singleUrl');
-//
-//Route::post('/urls/{id}/edit', function (Request $request) { // пост запрос на редактирование урла
-//    $params = ['url' => [], 'errors' => [], 'messages' => []];
-//    return view('main', $params);
-//})->name('editUrl');
-//
-//
-//Route::get('/urls', function (Request $request) { // список всех линков
-//    $params = ['url' => [], 'errors' => [], 'messages' => []];
-//    return view('main', $params);
-//});
+
+Route::get('/urls', function (Request $request) { // список всех линков
+    $urlsData = DB::table('urls')->get(); // через ПЛЮК получаем все значения одного столбца
+    $params = ['urlsData' => $urlsData, 'errors' => [], 'messages' => []];
+    return view('allUrls', $params);
+});
+
+Route::get('/url/{id}', function ($id) { // инфа о единичном урле c редактированием и так далее
+    // получаем инфу о линке из бд
+    $urlData = DB::table('urls')->where('id', $id)->first();
+    $params = ['urlData' => $urlData, 'messages' => []];
+    return view('singleUrl', $params);
+})->name('singleUrl');
 
 
 Route::post('/', function (Request $request) { // пост запрос на добавление урлов
