@@ -9,28 +9,30 @@
 @endsection
 
 
-@section('Main descripton')
-    <div style="text-align: center;"><h1>Web page analyzer</h1></div>
-    <div style="text-align: center;">Check sites for SEO for free</div>
+@section('Link Data')
+    <h2>Site: {{ $urlData->name }}</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-nowrap" style="width:100%">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Created at</th>
+                <th>Last update</th>
+            </tr>
+
+            <tr>
+                <td>{{ $urlData->id }}</td>
+                <td>{{ $urlData->name }}</td>
+                <td>{{ $urlData->created_at }}</td>
+                <td>{{ $urlData->updated_at }}</td>
+            </tr>
+        </table>
 @endsection
+
 
 @isset($messages) {{-- если в переменной есть какое либо значение--}}
-@section('messages')
-    <p>@include('flash::message')</p>
-@endsection
+    @section('messages')
+        <p>@include('flash::message')</p>
+    @endsection
 @endisset
 
-
-
-@section('url_input_form')
-    <form action="/postUrl" method="post">
-        @csrf
-        <label>
-            <input type="text" name="url[name]" value="{{-- {{ $url['name'] }} --}}">
-        </label>
-        {{--        <?php if (isset($errors['description'])): ?>--}}
-        {{--        <div><b><?= $errors['description'] ?></b></div>--}}
-        {{--        <?php endif ?>--}}
-        <input type="submit" value="CHECK">
-    </form>
-@endsection
