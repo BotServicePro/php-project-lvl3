@@ -20,6 +20,7 @@
 <body>
 @yield('header')
 
+
 @hasSection('messages')
     <div class="pull-right">
         @yield('messages')
@@ -29,8 +30,9 @@
 @endif
 
 
-
 @yield('Main descripton')
+
+
 @yield('url_input_form')
 </body>
 </html>
