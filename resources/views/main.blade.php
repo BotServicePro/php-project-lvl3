@@ -14,12 +14,12 @@
     <div style="text-align: center;">Check sites for SEO for free</div>
 @endsection
 
+
 @isset($messages) {{-- если в переменной есть какое либо значение--}}
     @section('messages')
         <p>@include('flash::message')</p>
     @endsection
 @endisset
-
 
 
 @section('url_input_form')
