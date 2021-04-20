@@ -23,21 +23,6 @@ Route::get('/', function (Request $request) { // главная страница
     return view('main', $params);
 })->name('main');
 
-
-Route::get('/urls', function (Request $request) { // список всех линков
-    $urlsData = DB::table('urls')->get(); // через ПЛЮК получаем все значения одного столбца
-    $params = ['urlsData' => $urlsData, 'errors' => [], 'messages' => []];
-    return view('allUrls', $params);
-});
-
-Route::get('/url/{id}', function ($id) { // инфа о единичном урле c редактированием и так далее
-    // получаем инфу о линке из бд
-    $urlData = DB::table('urls')->where('id', $id)->first();
-    $params = ['urlData' => $urlData, 'messages' => []];
-    return view('singleUrl', $params);
-})->name('singleUrl');
-
-
 Route::post('/', function (Request $request) { // пост запрос на добавление урлов
     $url = $request->input('url')['name']; // так же получили урл из запроса
     $parsedUrl = parse_url($url); // распарсили урл из запроса
@@ -69,8 +54,18 @@ Route::post('/', function (Request $request) { // пост запрос на д�
     $addedUrlID = DB::table('urls')->where('name', $valideUrl)->first()->id;
 
     $params = ['messages' => flash('Url was added!')->success()];
-    return view('main', $params);
-    //return route('singleUrl', ['id' => $addedUrlID]);
+    return redirect()->route('singleUrl', ['id' => $addedUrlID]); // редирект на именованную страницу с переданным параметром
 })->name('urls.store');
 
+Route::get('/urls', function (Request $request) { // список всех линков
+    $urlsData = DB::table('urls')->get(); // через ПЛЮК получаем все значения одного столбца
+    $params = ['urlsData' => $urlsData, 'errors' => [], 'messages' => []];
+    return view('allUrls', $params);
+});
 
+Route::get('/url/{id}', function ($id) { // инфа о единичном урле c редактированием и так далее
+    // получаем инфу о линке из бд
+    $urlData = DB::table('urls')->where('id', $id)->first();
+    $params = ['urlData' => $urlData, 'messages' => []];
+    return view('singleUrl', $params);
+})->name('singleUrl');
