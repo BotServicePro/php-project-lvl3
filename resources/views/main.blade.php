@@ -4,33 +4,32 @@
 @section('title', 'Main page')
 
 
-@section('header')
-    <h1>Web page analyzer</h1>
-@endsection
-
-
-@section('Main descripton')
-    <div style="text-align: center;"><h1>Web page analyzer</h1></div>
-    <div style="text-align: center;">Check sites for SEO for free</div>
+@section('description with input')
+    <main class="flex-grow-1">
+        <div class="jumbotron jumbotron-fluid bg-dark">
+            <div class="container-lg">
+                <div class="row">
+                    <div class="col-12 col-md-10 col-lg-8 mx-auto text-white">
+                        <h1 class="display-3">Web page analyze</h1>
+                        <p class="lead">Check web pages for SEO</p>
+                        <form action="/urls" method="post" class="d-flex justify-content-center">
+                            @csrf
+                            <label>
+                                <input type="text" placeholder="https://example.com" name="url[name]" value="{{-- {{ $url['name'] }} --}}">
+                            </label>
+                            <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">CHECK</button>
+                     </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 @endsection
 
 
 @isset($messages) {{-- если в переменной есть какое либо значение--}}
     @section('messages')
-        <p>@include('flash::message')</p>
+        @include('flash::message')
     @endsection
 @endisset
 
-
-@section('url_input_form')
-    <form action="/" method="post">
-        @csrf
-        <label>
-            <input type="text" placeholder="https://example.com" name="url[name]" value="{{-- {{ $url['name'] }} --}}">
-        </label>
-{{--        <?php if (isset($errors['description'])): ?>--}}
-{{--        <div><b><?= $errors['description'] ?></b></div>--}}
-{{--        <?php endif ?>--}}
-        <input type="submit" value="CHECK">
-    </form>
-@endsection

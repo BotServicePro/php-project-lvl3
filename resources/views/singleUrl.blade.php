@@ -4,11 +4,6 @@
 @section('title', 'Single url')
 
 
-@section('header')
-    <h1>Web page analyzer</h1>
-@endsection
-
-
 @section('Link Data')
     <h2>Site: {{ $urlData->name }}</h2>
     <div class="table-responsive">
@@ -32,7 +27,7 @@
 
 @isset($messages) {{-- если в переменной есть какое либо значение--}}
     @section('messages')
-        <p>@include('flash::message')</p>
+        @include('flash::message')
     @endsection
 @endisset
 
