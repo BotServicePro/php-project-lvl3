@@ -54,7 +54,7 @@ Route::post('/urls', function (Request $request) {
             $id = DB::table('urls')->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
                 ->first()->id;
             return redirect()->route('singleUrl', ['id' => $id])
-                ->withErrors(flash($errorMessage)->error());
+                ->withErrors(flash($errorMessage)->warning());
         }
         return redirect('/')
             ->withErrors(flash($errorMessage)->error());
