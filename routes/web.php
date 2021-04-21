@@ -47,8 +47,8 @@ Route::post('/urls', function (Request $request) {
 
     $validator = Validator::make($request->all(), $rules); // валидируем входные данные
     $errorMessage = $validator->errors()->first('url.name'); // получаем сообщения об ошибке
-    $errorMessage = str_replace('.name',  '', $errorMessage); // заменяем '.name' на пусто, хз как убрать по другому
-
+    // заменяем '.name' на пусто, хз как убрать по другому
+    $errorMessage = str_replace('.name', '', $errorMessage);
     if ($validator->fails()) { // если есть ошибки, делаем редирект на главную страницу и во влэш пишем ошибку
         if ($errorMessage === 'The url has already been taken.') {
             $id = DB::table('urls')->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
@@ -70,7 +70,8 @@ Route::post('/urls', function (Request $request) {
     $addedUrlID = DB::table('urls')->where('name', $valideUrl)->first()->id;
 
     $params = ['messages' => flash('Url was added!')->success()];
-    return redirect()->route('singleUrl', ['id' => $addedUrlID]); // редирект на именованную страницу с переданным параметром
+    // редирект на именованную страницу с переданным параметром
+    return redirect()->route('singleUrl', ['id' => $addedUrlID]);
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {

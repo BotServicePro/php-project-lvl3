@@ -11,7 +11,7 @@ test:
 	php artisan test
 
 lint:
-	composer phpcs
+	composer run-script phpcs -- --standard=PSR12 routes
 
 lint-fix:
-	composer phpcbf
+	composer run-script phpcbf -- --standard=PSR12 routes
