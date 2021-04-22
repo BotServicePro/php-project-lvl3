@@ -17,9 +17,9 @@ class UrlsTest extends TestCase
      *
      * @return void
      */
-    protected function setUp(): void
+
+    public function addTestDataToBase()
     {
-        parent::setUp();
         DB::table('urls')->insertGetId( // записываем в бд новый линк
             ['name' => 'http://google.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
@@ -45,15 +45,26 @@ class UrlsTest extends TestCase
 
     public function testRequestSingleUrlPage()
     {
-        self::setUp();
+        self::addTestDataToBase();
         $response = $this->get('/url/3');
         $response->assertStatus(200);
     }
 
-    public function testUrlPost()
+    public function testUrl()
     {
-        self::setUp();
+        DB::table('urls')->insertGetId( // записываем в бд новый линк
+            ['name' => 'http://123.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+        );
         $response = $this->get('/url/1');
         $response->assertStatus(200);
     }
+
+//    public function testUrlBody()
+//    {
+//        DB::table('urls')->insertGetId( // записываем в бд новый линк
+//            ['name' => 'http://123.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+//        );
+//        $response = $this->get('/url/1');
+//        $response->assertSee("<td>http://123.ru</td>");
+//    }
 }
