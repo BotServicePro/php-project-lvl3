@@ -59,6 +59,12 @@ class UrlsTest extends TestCase
         $response->assertStatus(200);
     }
 
+//    public function testPostUrl()
+//    {
+//        $response = $this->get(route('articles.create'));
+//        $response->assertOk();
+//    }
+
 //    public function testUrlBody()
 //    {
 //        DB::table('urls')->insertGetId( // записываем в бд новый линк
