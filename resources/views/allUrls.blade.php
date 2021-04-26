@@ -4,7 +4,7 @@
 @section('title', 'Added urls')
 
 
-@section('linksDataTable')
+@section('links_data_table')
     <h1 class="mt-5 mb-3">Links</h1>
     <div class="table-responsive">
     <table class="table table-bordered table-hover text-nowrap" style="width:100%">
