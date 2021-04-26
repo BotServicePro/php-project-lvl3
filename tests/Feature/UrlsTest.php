@@ -101,5 +101,4 @@ class UrlsTest extends TestCase
         $response = $this->post(route('urls.store'), ['url' => $urlData, $urlData]); // запостили теже самые
         $response->assertSessionHas('flash_notification.0.message', 'The url has already been taken.');
     }
-
 }
