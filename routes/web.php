@@ -51,13 +51,12 @@ Route::post('/urls', function (Request $request) {
     $errorMessage = str_replace('.name', '', $errorMessage);
     if ($validator->fails()) { // если есть ошибки, делаем редирект на главную страницу и во влэш пишем ошибку
         if ($errorMessage === 'The url has already been taken.') {
-            $id = DB::table('urls')->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
+            $id = DB::table('urls')
+                ->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
                 ->first()->id;
-            return redirect()->route('singleUrl', ['id' => $id])
-                ->withErrors(flash($errorMessage)->warning());
+            return redirect()->route('singleUrl', ['id' => $id])->withErrors(flash($errorMessage)->warning());
         }
-        return redirect('/')
-            ->withErrors(flash($errorMessage)->error());
+        return redirect('/')->withErrors(flash($errorMessage)->error());
     }
 
     $valideUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
@@ -67,21 +66,26 @@ Route::post('/urls', function (Request $request) {
     );
 
     // получаем ИД только что добавленного линка
-    $addedUrlID = DB::table('urls')->where('name', $valideUrl)->first()->id;
+    $addedUrlID = DB::table('urls')
+        ->where('name', $valideUrl)->first()->id;
 
     //$params = ['messages' => flash('Url was added!')->success()];
-    flash('Url was added!')->success(); // добавляем сообщение
+    flash('Url was added!')
+        ->success(); // добавляем сообщение
     // редирект на именованную страницу с переданным параметром
-    return redirect()->route('singleUrl', ['id' => $addedUrlID]);
+    return redirect()
+        ->route('singleUrl', ['id' => $addedUrlID]);
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {
     // получаем инфу о линке из бд
     $urlData = DB::table('urls')->where('id', $id)->first();
 
-    // делаем выборку проверок по одному линку
-    $checksData = DB::table('url_checks')->where('url_id', '=', $id)->get();
-    dump($checksData);
+    // делаем выборку проверок по одному линку c сортировкой по времени
+    $checksData = DB::table('url_checks')
+        ->where('url_id', '=', $id)
+        ->orderBy('updated_at', 'desc')
+        ->get();
     $params = ['urlData' => $urlData, 'messages' => [], 'checksData' => $checksData];
     return view('singleUrl', $params);
 })->name('singleUrl');
@@ -91,6 +95,11 @@ Route::post('url/{id}/checks', function ($id) {
     DB::table('url_checks')->insert( // добавляем в таблицу запись
         ['url_id' => $id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
     );
+
+    // добавляем обновленное время проверки в основную таблицу
+    DB::table('urls')
+        ->where('id', $id)
+        ->update(['updated_at' => Carbon::now()]);
     flash('Url was checked')->success(); // добавляем сообщение
     // Добавить так же проверку на существование домена
     // ДОПИСАТЬ ВСТАВКУ КОРРЕКТНОГО СООБЩЕНИЯ ОБ ОБНОВЛЕНИИ ССЫЛКИ
