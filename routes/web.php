@@ -17,18 +17,18 @@ use Illuminate\Support\Facades\Validator;
 |
 */
 
-Route::get('/', function (Request $request) {
+Route::get('/', function () {
     // главная страница
     $params = ['url' => [], 'errors' => [], 'messages' => []];
     return view('main', $params);
 })->name('main');
 
-Route::get('/urls', function (Request $request) {
+Route::get('/urls', function () {
     // список всех линков
     $urlsData = DB::table('urls')->get(); // через ПЛЮК получаем все значения одного столбца
     $params = ['urlsData' => $urlsData, 'errors' => [], 'messages' => []];
     return view('allUrls', $params);
-});
+})->name('allUrls');
 
 Route::post('/urls', function (Request $request) {
     // пост запрос на добавление урлов
@@ -42,8 +42,8 @@ Route::post('/urls', function (Request $request) {
         // проверка на уникальность линка, проверка в базе urls в столбе name
         'url.name' => 'bail|required|url|max:100|unique:urls,name'
     ];
-    $token = $request->session()->token();
-    $token = csrf_token();
+    $request->session()->token(); // token
+    csrf_token(); // token
 
     $validator = Validator::make($request->all(), $rules); // валидируем входные данные
     $errorMessage = $validator->errors()->first('url.name'); // получаем сообщения об ошибке
@@ -69,7 +69,7 @@ Route::post('/urls', function (Request $request) {
     // получаем ИД только что добавленного линка
     $addedUrlID = DB::table('urls')->where('name', $valideUrl)->first()->id;
 
-    $params = ['messages' => flash('Url was added!')->success()];
+    //$params = ['messages' => flash('Url was added!')->success()];
     // редирект на именованную страницу с переданным параметром
     return redirect()->route('singleUrl', ['id' => $addedUrlID]);
 })->name('urls.store');
