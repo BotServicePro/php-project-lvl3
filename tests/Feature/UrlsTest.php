@@ -80,16 +80,43 @@ class UrlsTest extends TestCase
         DB::table('urls')->insert( // записываем в бд новый линк
             ['name' => 'http://test.com', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         ); // заранее добавили запись в базу
-
+        // если выполнить два метода post, то почему то проверка не пройдет
         $urlData = ['name' => "http://test.com"]; // сформировали новые данные
-        $response = $this->post(route('urls.store'), ['url' => $urlData, $urlData]); // запостили теже самые
+        $response = $this->post(route('urls.store'), ['url' => $urlData]); // запостили теже самые
         $response->assertSessionHas('flash_notification.0.message', 'The url has already been taken.');
     }
 
     public function testSuccessAddedStoreUrl(): void
     {
         $urlData = ['name' => "http://test.com"]; // сформировали новые данные
-        $response = $this->post(route('urls.store'), ['url' => $urlData, $urlData]); // запостили теже самые
+        $response = $this->post(route('urls.store'), ['url' => $urlData]); // запостили теже самые
         $response->assertSessionHas('flash_notification.0.message', 'Url was added!');
+    }
+
+    public function testUrlCheck(): void
+    {
+        $urlData = ['name' => 'https://example.com'];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
+        $this->post(route('checkUrl', ['id' => $addedUrlID])); // сделали проверку домена
+        DB::table('url_checks')->where('url_id', $addedUrlID)->first()->url_id;
+        $checkData = ['url_id' => 1];
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('url_checks', $checkData);
+    }
+
+    public function testUrlSecondCheck(): void
+    {
+        $urlData = ['name' => 'https://example.com'];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
+        $this->post(route('checkUrl', ['id' => $addedUrlID])); // сделали сразу три проверки
+        $this->post(route('checkUrl', ['id' => $addedUrlID]));
+        $this->post(route('checkUrl', ['id' => $addedUrlID]));
+
+        DB::table('url_checks')->where('url_id', $addedUrlID)->first()->id;
+        $checkData = ['id' => 2];
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('url_checks', $checkData);
     }
 }
