@@ -70,14 +70,29 @@ Route::post('/urls', function (Request $request) {
     $addedUrlID = DB::table('urls')->where('name', $valideUrl)->first()->id;
 
     //$params = ['messages' => flash('Url was added!')->success()];
+    flash('Url was added!')->success(); // добавляем сообщение
     // редирект на именованную страницу с переданным параметром
     return redirect()->route('singleUrl', ['id' => $addedUrlID]);
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {
-    // инфа о единичном урле c редактированием и так далее
     // получаем инфу о линке из бд
     $urlData = DB::table('urls')->where('id', $id)->first();
-    $params = ['urlData' => $urlData, 'messages' => []];
+
+    // делаем выборку проверок по одному линку
+    $checksData = DB::table('url_checks')->where('url_id', '=', $id)->get();
+    dump($checksData);
+    $params = ['urlData' => $urlData, 'messages' => [], 'checksData' => $checksData];
     return view('singleUrl', $params);
 })->name('singleUrl');
+
+
+Route::post('url/{id}/checks', function ($id) {
+    DB::table('url_checks')->insert( // добавляем в таблицу запись
+        ['url_id' => $id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+    );
+    flash('Url was checked')->success(); // добавляем сообщение
+    // Добавить так же проверку на существование домена
+    // ДОПИСАТЬ ВСТАВКУ КОРРЕКТНОГО СООБЩЕНИЯ ОБ ОБНОВЛЕНИИ ССЫЛКИ
+    return redirect()->route('singleUrl', ['id' => $id]);
+})->name('checkUrl');
