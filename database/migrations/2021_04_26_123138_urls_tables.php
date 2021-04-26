@@ -23,11 +23,11 @@ class UrlsTables extends Migration
         Schema::create('url_checks', function (Blueprint $table) {
             $table->increments('id');
             // $table->integer('url_id')->references('id')->on('urls'); // ссылается на поле id таблицы urls
-            $table->foreignId('user_id')->constrained('urls'); // тоже самое но короче
-            $table->integer('status_code');
-            $table->string('h1');
-            $table->string('keywords');
-            $table->string('description');
+            $table->foreignId('url_id')->constrained('urls'); // тоже самое но короче
+            $table->integer('status_code')->nullable();
+            $table->string('h1')->nullable();
+            $table->string('keywords')->nullable();
+            $table->string('description')->nullable();
             $table->timestamp('updated_at');
             $table->timestamp('created_at');
         });
