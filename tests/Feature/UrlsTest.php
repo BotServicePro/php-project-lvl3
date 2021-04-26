@@ -16,22 +16,6 @@ class UrlsTest extends TestCase
      *
      * @return void
      */
-//    protected function setUp(): void
-//    {
-//        parent::setUp();
-//
-//        DB::table('urls')->insertGetId( // записываем в бд новый линк
-//            ['name' => 'http://google.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-//        );
-//        DB::table('urls')->insertGetId( // записываем в бд новый линк
-//            ['name' => 'http://auto.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-//        );
-//        DB::table('urls')->insertGetId( // записываем в бд новый линк
-//            ['name' => 'http://test.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-//        );
-//    }
-
-
     public function testIndex()
     {
         $response = $this->get(route('main'));
@@ -54,7 +38,7 @@ class UrlsTest extends TestCase
 
     public function testSingleUrlNotFound()
     {
-        DB::table('urls')->insertGetId( // записываем в бд новый линк
+        DB::table('urls')->insert( // записываем в бд новый линк
             ['name' => 'http://123.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
         $response = $this->get(route('singleUrl', ['id' => 88]));
@@ -93,12 +77,19 @@ class UrlsTest extends TestCase
 
     public function testAlreadyAddedStoreUrl(): void
     {
-        DB::table('urls')->insertGetId( // записываем в бд новый линк
+        DB::table('urls')->insert( // записываем в бд новый линк
             ['name' => 'http://test.com', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         ); // заранее добавили запись в базу
 
         $urlData = ['name' => "http://test.com"]; // сформировали новые данные
         $response = $this->post(route('urls.store'), ['url' => $urlData, $urlData]); // запостили теже самые
         $response->assertSessionHas('flash_notification.0.message', 'The url has already been taken.');
+    }
+
+    public function testSuccessAddedStoreUrl(): void
+    {
+        $urlData = ['name' => "http://test.com"]; // сформировали новые данные
+        $response = $this->post(route('urls.store'), ['url' => $urlData, $urlData]); // запостили теже самые
+        $response->assertSessionHas('flash_notification.0.message', 'Url was added!');
     }
 }
