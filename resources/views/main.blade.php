@@ -4,7 +4,7 @@
 @section('title', 'Main page')
 
 
-@section('description with input')
+@section('description_with_input')
     <main class="flex-grow-1">
         <div class="jumbotron jumbotron-fluid bg-dark">
             <div class="container-lg">
