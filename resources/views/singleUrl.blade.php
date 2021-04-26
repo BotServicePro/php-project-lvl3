@@ -36,7 +36,7 @@
             <h2 class="mt-5 mb-3">Checks</h2>
             <form action="/url/{{ $urlData->id }}/checks" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <input type="submit" class="btn btn-primary" value="CHECK">
+                <input type="submit" class="btn btn-primary" value="Start check">
             </form>
 
             <div class="table-responsive">
