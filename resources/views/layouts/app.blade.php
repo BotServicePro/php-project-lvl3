@@ -39,13 +39,16 @@
 @yield('messages')
 
 
-@yield('description with input')
+@yield('description_with_input')
 
 
-@yield('Link Data')
+@yield('link_data')
 
 
-@yield('linksDataTable')
+@yield('checks_data')
+
+
+@yield('links_data_table')
 
 
 @yield('url_input_form')
