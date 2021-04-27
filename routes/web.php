@@ -1,5 +1,8 @@
 <?php
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -18,15 +21,24 @@ use Illuminate\Support\Facades\Validator;
 */
 
 Route::get('/', function () {
-    // главная страница
     $params = ['url' => [], 'errors' => [], 'messages' => []];
     return view('main', $params);
 })->name('main');
 
 Route::get('/urls', function () {
     // список всех линков
-    $urlsData = DB::table('urls')->get(); // через ПЛЮК получаем все значения одного столбца
-    $params = ['urlsData' => $urlsData, 'errors' => [], 'messages' => []];
+    $urlsData = DB::table('urls')->orderBy('id', 'desc')->get();
+
+    $checksData = DB::table('url_checks')
+        ->distinct('url_id')
+        ->orderBy('url_id')
+        ->orderBy('created_at', 'desc')
+        ->get();
+    $checksStatuses = $checksData->keyBy('url_id');
+
+    // ОТЛОВИТЬ ОШИБКУ НЕСУЩЕСТВУЮЩЕГО ИД линка
+
+    $params = ['urlsData' => $urlsData, 'errors' => [], 'messages' => [], 'checksStatuses' => $checksStatuses];
     return view('allUrls', $params);
 })->name('allUrls');
 
@@ -92,11 +104,28 @@ Route::get('/url/{id}', function ($id) {
 
 
 Route::post('url/{id}/checks', function ($id) {
-    DB::table('url_checks')->insert( // добавляем в таблицу запись
-        ['url_id' => $id, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-    );
+    //$response = Http::get('http://mobbit.info')->body(); // получаем html страницу, код
+    //$response = Http::get('http://mobbit.info');
 
-    // добавляем обновленное время проверки в основную таблицу
+    // получаем ссылку по которой идет проверка
+    $url = DB::table('urls')->where('id', '=', $id)->first()->name;
+    $client = new GuzzleHttp\Client();
+    try {
+        $client->request('GET', $url);
+        $statusCode = $client->request('GET', $url)->getStatusCode(); // получаем статус
+    } catch (ConnectException $e) {
+        flash("ConnectException: {$e->getMessage()}")->error(); // добавляем сообщение
+        return redirect()->route('singleUrl', ['id' => $id]);
+    } catch (ClientException $e) {
+        $statusCode = $e->getResponse()->getStatusCode();
+    } catch (RequestException $e) {
+        flash("RequestException: {$e->getMessage()}")->error(); // добавляем сообщение
+        return redirect()->route('singleUrl', ['id' => $id]);
+    }
+
+    DB::table('url_checks')->insert( // добавляем в таблицу запись
+        ['url_id' => $id, 'status_code' => $statusCode, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+    );
     DB::table('urls')
         ->where('id', $id)
         ->update(['updated_at' => Carbon::now()]);
