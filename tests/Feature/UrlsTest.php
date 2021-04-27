@@ -119,4 +119,7 @@ class UrlsTest extends TestCase
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('url_checks', $checkData);
     }
+    public function testCheckStatus200()
+    {
+    }
 }
