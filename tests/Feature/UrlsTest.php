@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class UrlsTest extends TestCase
@@ -95,7 +96,7 @@ class UrlsTest extends TestCase
 
     public function testUrlCheck(): void
     {
-        $urlData = ['name' => 'https://example.com'];
+        $urlData = ['name' => 'https://google.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
         $this->post(route('checkUrl', ['id' => $addedUrlID])); // сделали проверку домена
@@ -107,7 +108,7 @@ class UrlsTest extends TestCase
 
     public function testUrlSecondCheck(): void
     {
-        $urlData = ['name' => 'https://example.com'];
+        $urlData = ['name' => 'https://google.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
         $this->post(route('checkUrl', ['id' => $addedUrlID])); // сделали сразу три проверки
@@ -115,11 +116,28 @@ class UrlsTest extends TestCase
         $this->post(route('checkUrl', ['id' => $addedUrlID]));
 
         DB::table('url_checks')->where('url_id', $addedUrlID)->first()->id;
-        $checkData = ['id' => 2];
+        $checkData = ['id' => 3];
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('url_checks', $checkData);
     }
+
     public function testCheckStatus200()
     {
+        DB::table('urls')->insert( // записываем в бд новый линк
+            ['name' => 'http://google.com', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+        ); // заранее добавили запись в базу
+
+        Http::fake([
+            '*' => Http::response(['id' => 1, 'status_code' => 200], 200)
+        ]);
+
+        $response = $this->post(route('checkUrl', ['id' => 1]));
+        $response->assertSessionHasNoErrors();
+
+        dump($response->status()); // что получили из запроса
+        dump(DB::table('url_checks')->where('url_id', 1)->first()->status_code); // что по факту в базе
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('url_checks', ['id' => 1]);
     }
 }
