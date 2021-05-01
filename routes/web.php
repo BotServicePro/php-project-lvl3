@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use DiDom\Document;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,16 @@ use Illuminate\Support\Facades\Validator;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// проверка на длину и обрезка
+//function lengthCheck($data, $offSet, $dataLength): string
+//{
+//    if (strlen($data) >= $dataLength) {
+//        $data = substr($data, $offSet, $dataLength);
+//        return "{$data}...";
+//    }
+//    return $data;
+//}
 
 Route::get('/', function () {
     $params = ['url' => [], 'errors' => [], 'messages' => []];
@@ -56,6 +67,10 @@ Route::post('/urls', function (Request $request) {
     ];
     $request->session()->token(); // token
     csrf_token(); // token
+
+
+    // ДОБАВИТЬ ПРОСТУЮ КАПЧКУ НА ВВОД ЛИНКА
+
 
     $validator = Validator::make($request->all(), $rules); // валидируем входные данные
     $errorMessage = $validator->errors()->first('url.name'); // получаем сообщения об ошибке
@@ -104,11 +119,67 @@ Route::get('/url/{id}', function ($id) {
 
 
 Route::post('url/{id}/checks', function ($id) {
+
+
     //$response = Http::get('http://mobbit.info')->body(); // получаем html страницу, код
     //$response = Http::get('http://mobbit.info');
-
     // получаем ссылку по которой идет проверка
     $url = DB::table('urls')->where('id', '=', $id)->first()->name;
+//    Проверьте наличие тега <h1> на странице. Если он есть то запишите его содержимое в базу.
+//    Проверьте наличие тега <meta name="keywords" content="..."> на странице.
+//    Если он есть то запишите содержимое аттрибута content в базу.
+//    Проверьте наличие тега <meta name="description" content="..."> на странице.
+//    Если он есть то запишите содержимое аттрибута content в базу.
+//    Выведите эту информацию в списке проверок конкретного сайта.
+
+    try {
+        $document = new Document($url, true);
+    } catch (RuntimeException $e) {
+        flash("ConnectException: {$e->getMessage()}")->error(); // добавляем сообщение
+        return redirect()->route('singleUrl', ['id' => $id]);
+    }
+
+    $h1 = '';
+    $keywords = '';
+    $description = '';
+    $offSet = 0;
+    $dataLength = 50;
+
+    try {
+        $h1 = $document->find('h1')[0]->text();
+    } catch (ErrorException $e) {
+    }
+
+    try {
+        $keywords = $document->find('*[name=keywords]')[0]->content;
+    } catch (ErrorException $e) {
+        if (isset($document->find('*[name=Keywords]')[0]->content)) {
+            $keywords = $document->find('*[name=Keywords]')[0]->content;
+        }
+        if (isset($document->find('*[property=og:keywords]')[0]->content)) {
+            $keywords = $document->find('*[property=og:keywords]')[0]->content;
+        }
+    }
+
+    try {
+        $description = $document->find('*[name=Description]')[0]->content;
+    } catch (ErrorException $e) {
+        if (isset($document->find('*[name=description]')[0]->content)) {
+            $description = $document->find('*[name=description]')[0]->content;
+        }
+        if (isset($document->find('*[property=og:description]')[0]->content)) {
+            $description = $document->find('*[property=og:description]')[0]->content;
+        }
+    }
+    if (strlen($description) >= $dataLength) {
+        $data = substr($description, $offSet, $dataLength);
+        $description = "{$data}...";
+    }
+
+    if (strlen($keywords) >= $dataLength) {
+        $data = substr($keywords, $offSet, $dataLength);
+        $keywords = "{$data}...";
+    }
     $client = new GuzzleHttp\Client();
     try {
         $client->request('GET', $url);
@@ -124,13 +195,19 @@ Route::post('url/{id}/checks', function ($id) {
     }
 
     DB::table('url_checks')->insert( // добавляем в таблицу запись
-        ['url_id' => $id, 'status_code' => $statusCode, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+        [
+            'url_id' => $id,
+            'status_code' => $statusCode,
+            'h1' => $h1,
+            'keywords' => $keywords,
+            'description' => $description,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]
     );
     DB::table('urls')
         ->where('id', $id)
         ->update(['updated_at' => Carbon::now()]);
-    flash('Url was checked')->success(); // добавляем сообщение
-    // Добавить так же проверку на существование домена
-    // ДОПИСАТЬ ВСТАВКУ КОРРЕКТНОГО СООБЩЕНИЯ ОБ ОБНОВЛЕНИИ ССЫЛКИ
+    flash('Url was checked')->message(); // добавляем сообщение
     return redirect()->route('singleUrl', ['id' => $id]);
 })->name('checkUrl');
