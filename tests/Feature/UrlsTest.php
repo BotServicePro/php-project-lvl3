@@ -43,7 +43,7 @@ class UrlsTest extends TestCase
             ['name' => 'http://123.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
         $response = $this->get(route('singleUrl', ['id' => 88]));
-        $response->assertStatus(500);
+        $response->assertStatus(404);
     }
 
     public function testStore(): void
@@ -111,7 +111,7 @@ class UrlsTest extends TestCase
         $urlData = ['name' => 'https://google.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
-        $this->post(route('checkUrl', ['id' => $addedUrlID])); // сделали сразу три проверки
+        $this->post(route('checkUrl', ['id' => $addedUrlID]));
         $this->post(route('checkUrl', ['id' => $addedUrlID]));
         $this->post(route('checkUrl', ['id' => $addedUrlID]));
 
@@ -123,21 +123,21 @@ class UrlsTest extends TestCase
 
     public function testCheckStatus200()
     {
-        DB::table('urls')->insert( // записываем в бд новый линк
-            ['name' => 'http://google.com', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-        ); // заранее добавили запись в базу
-
-        Http::fake([
-            '*' => Http::response(['id' => 1, 'status_code' => 200], 200)
-        ]);
-
+        DB::table('urls')->insert(
+            ['name' => 'https://php.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+        );
+        $responseFromFixtures = file_get_contents('tests/fixtures/testpage.html');
+        $expectedData = [
+            'url_id' => 1,
+            'status_code' => 200,
+            'keywords' => 'php, php.ru, форум php, php программ?...',
+            'description' => 'Форум PHP программистов, док?...',
+            'h1' => 'Новости'
+        ];
+        Http::fake(['https://php.ru' => Http::response($responseFromFixtures, 200)]);
         $response = $this->post(route('checkUrl', ['id' => 1]));
         $response->assertSessionHasNoErrors();
-
-        dump($response->status()); // что получили из запроса
-        dump(DB::table('url_checks')->where('url_id', 1)->first()->status_code); // что по факту в базе
-
         $response->assertRedirect();
-        $this->assertDatabaseHas('url_checks', ['id' => 1]);
+        $this->assertDatabaseHas('url_checks', $expectedData);
     }
 }
