@@ -15,13 +15,9 @@
                         <form action="/urls" method="post" class="d-flex justify-content-center">
                             @csrf
                             <label>
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                <input type="text" placeholder="https://example.com" name="url[name]" value="{{-- {{ $url['name'] }} --}}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="text" size="70" name="url[name]" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
                             </label>
-{{--                            <label>--}}
-{{--                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />--}}
-{{--                                <input type="text" placeholder="Enter captcha answer" name="url[name]" value="--}}{{-- {{ $url['name'] }} --}}{{--">--}}
-{{--                            </label>--}}
                             <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">CHECK</button>
                      </form>
                     </div>
