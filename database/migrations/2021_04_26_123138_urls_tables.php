@@ -14,16 +14,15 @@ class UrlsTables extends Migration
     public function up()
     {
         Schema::create('urls', function (Blueprint $table) {
-                $table->increments('id');
-                $table->string('name', 100)->unique(); // varchar(100)
+                $table->id();
+                $table->string('name', 100)->unique();
                 $table->timestamp('created_at');
                 $table->timestamp('updated_at');
         });
 
         Schema::create('url_checks', function (Blueprint $table) {
-            $table->increments('id');
-            // $table->integer('url_id')->references('id')->on('urls'); // ссылается на поле id таблицы urls
-            $table->foreignId('url_id')->constrained('urls'); // тоже самое но короче
+            $table->id();
+            $table->foreignId('url_id')->constrained('urls');
             $table->integer('status_code')->nullable();
             $table->string('h1')->nullable();
             $table->string('keywords')->nullable();
