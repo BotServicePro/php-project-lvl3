@@ -12,9 +12,10 @@
 
 
 @section('link_data')
-    <h2>Site: {{ $urlData->name }}</h2>
+    <div class="container-lg">
+    <h1 class="mt-5 mb-3">Site: {{ $urlData->name }}</h1>
     <div class="table-responsive">
-        <table class="table table-bordered table-hover text-nowrap" style="width:100%">
+        <table class="table table-bordered table-hover text-nowrap">
             <tr>
                 <th>ID</th>
                 <th>Name</th>
@@ -29,21 +30,24 @@
                 <td>{{ $urlData->updated_at }}</td>
             </tr>
         </table>
+    </div>
+    </div>
 @endsection
 
 
 @section('checks_data')
+    <div class="container-lg">
             <h2 class="mt-5 mb-3">Checks</h2>
             <form action="/url/{{ $urlData->id }}/checks" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <input type="submit" class="btn btn-primary" value="Start check">
             </form>
-
+                <br>
             <div class="table-responsive">
-                <table class="table table-bordered table-hover text-nowrap" style="width:100%">
+                <table class="table table-bordered table-hover text-nowrap">
                     <tr>
                         <th>ID</th>
-                        <th>Status code</th>
+                        <th>Answer code</th>
                         <th>H1</th>
                         <th>Keywords</th>
                         <th>Description</th>
@@ -60,4 +64,5 @@
                         </tr>
                     @endforeach
                 </table>
+            </div>
 @endsection
