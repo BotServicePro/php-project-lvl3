@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -33,3 +33,13 @@ jobs:
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: make test
+               - name: Run test & publish code coverage
+               uses: paambaati/codeclimate-action@v2.6.0
+          # Add Code Climate secret key
+               env:
+                 CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
+               with:
+                 coverageCommand: make test-coverage
+                 coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
+                 debug: true
+
