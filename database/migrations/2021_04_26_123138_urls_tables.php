@@ -16,8 +16,8 @@ class UrlsTables extends Migration
         Schema::create('urls', function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 100)->unique();
-                $table->timestamp('created_at');
-                $table->timestamp('updated_at');
+                $table->timestamp('created_at')->nullable();
+                $table->timestamp('updated_at')->nullable();
         });
 
         Schema::create('url_checks', function (Blueprint $table) {
@@ -27,8 +27,8 @@ class UrlsTables extends Migration
             $table->string('h1')->nullable();
             $table->string('keywords')->nullable();
             $table->string('description')->nullable();
-            $table->timestamp('updated_at');
-            $table->timestamp('created_at');
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
 
 
