@@ -35,13 +35,12 @@ jobs:
         run: make test
           # Publish code coverage on Code Climate
           # https://github.com/paambaati/codeclimate-action
-      - name: Run test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.6.0
-            # Add Code Climate secret key
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.5
         env:
-          XDEBUG_MODE: coverage
-          CC_TEST_REPORTER_ID: ${{ secrets.HEXLET_ID }}
+         XDEBUG_MODE: coverage
+         CC_TEST_REPORTER_ID: ${{ secrets.REPORTER_ID }}
         with:
-          coverageCommand: make test-coverage
-          coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
-          debug: true
+         coverageCommand: make test-coverage
+         coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
+         debug: true
