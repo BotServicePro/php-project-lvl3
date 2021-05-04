@@ -34,8 +34,7 @@ class UrlsTest extends TestCase
         $urlData = ['name' => "http://test.com"];
         $this->post(route('urls.store'), ['url' => $urlData]);
         $response = $this->get(route('singleUrl', ['id' => 1]));
-        //$response->assertOk();
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
     public function testSingleUrlNotFound()
