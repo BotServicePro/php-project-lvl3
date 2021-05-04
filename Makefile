@@ -22,11 +22,11 @@ log:
 test:
 	php artisan test
 
+test-coverage:
+    composer phpunit tests -- --coverage-clover build/logs/clover.xml
+
 lint:
 	composer run-script phpcs -- --standard=PSR12 routes tests
 
 lint-fix:
 	composer run-script phpcbf -- --standard=PSR12 routes tests
-
-test-coverage:
-    composer phpunit tests -- --coverage-clover build/logs/clover.xml
