@@ -25,7 +25,6 @@ plugins:
     config:
       file_extensions:
         - php
-        # - inc
 
   # https://docs.codeclimate.com/docs/sonar-php
   sonar-php:
