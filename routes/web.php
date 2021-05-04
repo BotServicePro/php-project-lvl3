@@ -34,13 +34,11 @@ Route::get('/urls', function () {
     $urlsData = DB::table('urls')
         ->orderBy('id', 'asc')
         ->get();
-
     $checksData = DB::table('url_checks')
         ->distinct('url_id')
         ->orderBy('url_id')
         ->orderBy('created_at', 'desc')
         ->get();
-
     $checksStatuses = $checksData->keyBy('url_id');
     $params = [
         'urlsData' => $urlsData,
@@ -52,13 +50,13 @@ Route::get('/urls', function () {
 })->name('allUrls');
 
 Route::post('/urls', function (Request $request) {
-    $url = strtolower($request->input('url')['name']);
+    $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
+    $request->session()->token();
+    csrf_token();
     $rules = [
         'url.name' => 'bail|required|url|max:100|unique:urls,name'
     ];
-    $request->session()->token();
-    csrf_token();
     $validator = Validator::make($request->all(), $rules);
     $errorMessage = $validator
         ->errors()
@@ -175,6 +173,7 @@ Route::post('url/{id}/checks', function ($id) {
         $data = substr($keywords, $offSet, $dataLength);
         $keywords = "{$data}...";
     }
+
     $client = new GuzzleHttp\Client();
 
     try {
