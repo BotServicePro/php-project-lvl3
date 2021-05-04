@@ -33,6 +33,8 @@ jobs:
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: make test
+          # Publish code coverage on Code Climate
+          # https://github.com/paambaati/codeclimate-action
                - name: Run test & publish code coverage
                uses: paambaati/codeclimate-action@v2.6.0
           # Add Code Climate secret key
