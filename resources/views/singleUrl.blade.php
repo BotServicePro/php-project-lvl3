@@ -36,6 +36,7 @@
 
 
 @section('checks_data')
+    <main class="flex-grow-1">
     <div class="container-lg">
             <h2 class="mt-5 mb-3">Checks</h2>
             <form action="/url/{{ $urlData->id }}/checks" method="post">
@@ -65,4 +66,6 @@
                     @endforeach
                 </table>
             </div>
+    </div>
+    </main>
 @endsection
