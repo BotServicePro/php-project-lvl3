@@ -29,26 +29,22 @@ Route::get('/urls', function () {
     $urlsData = DB::table('urls')
         ->orderBy('id', 'asc')
         ->get();
+
     $checksData = DB::table('url_checks')
         ->distinct('url_id')
         ->orderBy('url_id')
         ->orderBy('created_at', 'desc')
-        ->get();
-    $checksStatuses = $checksData->keyBy('url_id');
-    $params = [
-        'urlsData' => $urlsData,
-        'errors' => [],
-        'messages' => [],
-        'checksStatuses' => $checksStatuses
-    ];
-    return view('urls/index', $params);
+        ->get()
+        ->keyBy('url_id');
+    $messages = [];
+    return view('urls/index', compact('urlsData', 'checksData', 'messages'));
 })->name('urls.index');
 
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
-    $request->session()->token();
-    csrf_token();
+//    $request->session()->token();
+//    csrf_token();
     $rules = [
         'url.name' => 'bail|required|url|max:100|unique:urls,name'
     ];
@@ -106,12 +102,8 @@ Route::get('/url/{id}', function ($id) {
         ->orderBy('updated_at', 'desc')
         ->get();
 
-    $params = [
-        'urlData' => $urlData,
-        'messages' => [],
-        'checksData' => $checksData];
-
-    return view('urls/show', $params);
+        $messages = [];
+    return view('urls/show', compact('urlData', 'checksData', 'messages'));
 })->name('show.url');
 
 Route::post('url/{id}/checks', function ($id) {
