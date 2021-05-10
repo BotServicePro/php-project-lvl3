@@ -18,11 +18,11 @@
         @foreach ($urlsData as $url)
         <tr>
             <td>{{ $url->id }}</td>
-            <td><a href="/url/{{ $url->id }}">{{ $url->name }}</a></td>
+            <td><a href="{{ route('show.url', ['id' => $url->id]) }}">{{ $url->name }}</a></td>
             <td>{{ $url->updated_at }}</td>
             <td>
-                @isset($checksStatuses[$url->id]->status_code)
-                    {{  $checksStatuses[$url->id]->status_code }}
+                @isset($checksData[$url->id]->status_code)
+                    {{  $checksData[$url->id]->status_code }}
                 @endisset
             </td>
         </tr>
