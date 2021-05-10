@@ -4,7 +4,10 @@
 @section('title', 'Added urls')
 
 
-@section('links_data_table')
+@section('content')
+    @isset($messages) {{-- если в переменной есть какое либо значение--}}
+        @include('flash::message')
+    @endisset
     <div class="container-lg">
         <h1 class="mt-5 mb-3">Links</h1>
         <div class="table-responsive">
@@ -29,11 +32,4 @@
         @endforeach
     </table>
 @endsection
-
-@isset($messages) {{-- если в переменной есть какое либо значение--}}
-    @section('messages')
-        @include('flash::message')
-    @endsection
-@endisset
-
 

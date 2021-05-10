@@ -35,26 +35,7 @@
     </nav>
 </header>
 
-
-
-
-@yield('messages')
-
-
-@yield('description_with_input')
-
-
-@yield('link_data')
-
-
-@yield('checks_data')
-
-
-@yield('links_data_table')
-
-
-@yield('url_input_form')
-
+@yield('content')
 
 <footer class="border-top py-3 mt-5 flex-shrink-0">
     <div class="container-lg">

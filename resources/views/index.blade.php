@@ -4,7 +4,10 @@
 @section('title', 'Main page')
 
 
-@section('description_with_input')
+@section('content')
+    @isset($messages) {{-- если в переменной есть какое либо значение--}}
+        @include('flash::message')
+    @endisset
     <main class="flex-grow-1">
         <div class="jumbotron jumbotron-fluid bg-dark">
             <div class="container-lg">
@@ -26,11 +29,4 @@
         </div>
     </main>
 @endsection
-
-
-@isset($messages) {{-- если в переменной есть какое либо значение--}}
-    @section('messages')
-        @include('flash::message')
-    @endsection
-@endisset
 
