@@ -11,9 +11,10 @@
         "imangazaliev/didom": "^1.16",
         "laracasts/flash": "^3.2",
         "laravel/framework": "^8.12",
+        "laravel/telescope": "^4.4",
         "laravel/tinker": "^2.5",
-        "nesbot/carbon": "^2.46",
-        "laravel/telescope": "^4.4"
+        "laravel/ui": "^3.2",
+        "nesbot/carbon": "^2.46"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
