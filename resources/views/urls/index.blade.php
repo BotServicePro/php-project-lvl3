@@ -5,9 +5,6 @@
 
 
 @section('content')
-    @isset($messages) {{-- если в переменной есть какое либо значение--}}
-        @include('flash::message')
-    @endisset
     <div class="container-lg">
         <h1 class="mt-5 mb-3">Links</h1>
         <div class="table-responsive">

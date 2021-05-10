@@ -5,9 +5,7 @@
 
 
 @section('content')
-    @isset($messages) {{-- если в переменной есть какое либо значение--}}
-        @include('flash::message')
-    @endisset
+
     <main class="flex-grow-1">
         <div class="jumbotron jumbotron-fluid bg-dark">
             <div class="container-lg">

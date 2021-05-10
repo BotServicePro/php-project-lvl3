@@ -35,6 +35,10 @@
     </nav>
 </header>
 
+@isset($messages)
+    @include('flash::message')
+@endisset
+
 @yield('content')
 
 <footer class="border-top py-3 mt-5 flex-shrink-0">

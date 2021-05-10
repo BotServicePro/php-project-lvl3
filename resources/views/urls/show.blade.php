@@ -5,9 +5,6 @@
 
 
 @section('content')
-    @isset($messages)
-        @include('flash::message')
-    @endisset
     <div class="container-lg">
     <h1 class="mt-5 mb-3">Site: {{ $urlData->name }}</h1>
     <div class="table-responsive">
