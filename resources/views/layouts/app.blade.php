@@ -18,17 +18,17 @@
 
 <header class="flex-shrink-0">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Web page analyzer</a>
+        <a class="navbar-brand" href="{{ route('main.page') }}">Web page analyzer</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">Main</a>
+                    <a class="nav-link active" href="{{ route('main.page') }}">Main</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="/urls">Links</a>
+                    <a class="nav-link " href="{{ route('urls.index') }}">Links</a>
                 </li>
             </ul>
         </div>
