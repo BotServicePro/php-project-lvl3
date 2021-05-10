@@ -22,12 +22,7 @@ use DiDom\Document;
 |
 */
 Route::get('/', function () {
-    $params = [
-        'url' => [],
-        'errors' => [],
-        'messages' => []
-    ];
-    return view('index', $params);
+    return view('index');
 })->name('main.page');
 
 Route::get('/urls', function () {
