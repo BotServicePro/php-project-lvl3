@@ -43,15 +43,14 @@ Route::get('/urls', function () {
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
-//    $request->session()->token();
-//    csrf_token();
     $rules = [
         'url.name' => 'bail|required|url|max:100|unique:urls,name'
     ];
-    $validator = Validator::make($request->all(), $rules);
+    $validator = Validator::make($request->all('url'), $rules);
     $errorMessage = $validator
         ->errors()
         ->first('url.name');
+    dump($request->all('url'));
 
     // заменяем '.name' на пусто, хз как убрать по другому
     $errorMessage = str_replace('.name', '', $errorMessage);

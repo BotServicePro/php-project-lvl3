@@ -5,7 +5,6 @@
 
 
 @section('content')
-
     <main class="flex-grow-1">
         <div class="jumbotron jumbotron-fluid bg-dark">
             <div class="container-lg">
