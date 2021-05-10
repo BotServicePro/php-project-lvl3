@@ -35,12 +35,9 @@
     </nav>
 </header>
 
-@isset($messages)
-    @include('flash::message')
-@endisset
+@include('flash::message')
 
 @yield('content')
-
 <footer class="border-top py-3 mt-5 flex-shrink-0">
     <div class="container-lg">
         <div class="text-center">
