@@ -19,13 +19,13 @@ class UrlsTest extends TestCase
      */
     public function testIndex()
     {
-        $response = $this->get(route('main'));
+        $response = $this->get(route('main.page'));
         $response->assertOk();
     }
 
     public function testAllUrls()
     {
-        $response = $this->get(route('allUrls'));
+        $response = $this->get(route('urls.index'));
         $response->assertOk();
     }
 
@@ -33,7 +33,7 @@ class UrlsTest extends TestCase
     {
         $urlData = ['name' => "http://test.com"];
         $this->post(route('urls.store'), ['url' => $urlData]);
-        $response = $this->get(route('singleUrl', ['id' => 1]));
+        $response = $this->get(route('show.url', ['id' => 1]));
         $response->assertOk();
     }
 
@@ -42,7 +42,7 @@ class UrlsTest extends TestCase
         DB::table('urls')->insert( // записываем в бд новый линк
             ['name' => 'http://123.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
-        $response = $this->get(route('singleUrl', ['id' => 88]));
+        $response = $this->get(route('show.url', ['id' => 88]));
         $response->assertStatus(404);
     }
 
@@ -99,7 +99,7 @@ class UrlsTest extends TestCase
         $urlData = ['name' => 'https://google.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
-        $this->post(route('checkUrl', ['id' => $addedUrlID])); // сделали проверку домена
+        $this->post(route('check.url', ['id' => $addedUrlID])); // сделали проверку домена
         DB::table('url_checks')->where('url_id', $addedUrlID)->first()->url_id;
         $checkData = ['url_id' => 1];
         $response->assertSessionHasNoErrors();
@@ -111,9 +111,9 @@ class UrlsTest extends TestCase
         $urlData = ['name' => 'https://google.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $addedUrlID = DB::table('urls')->where('name', $urlData['name'])->first()->id;
-        $this->post(route('checkUrl', ['id' => $addedUrlID]));
-        $this->post(route('checkUrl', ['id' => $addedUrlID]));
-        $this->post(route('checkUrl', ['id' => $addedUrlID]));
+        $this->post(route('check.url', ['id' => $addedUrlID]));
+        $this->post(route('check.url', ['id' => $addedUrlID]));
+        $this->post(route('check.url', ['id' => $addedUrlID]));
 
         DB::table('url_checks')->where('url_id', $addedUrlID)->first()->id;
         $checkData = ['id' => 3];
@@ -135,7 +135,7 @@ class UrlsTest extends TestCase
             'h1' => 'Новости'
         ];
         Http::fake(['https://php.ru' => Http::response($responseFromFixtures, 200)]);
-        $response = $this->post(route('checkUrl', ['id' => 1]));
+        $response = $this->post(route('check.url', ['id' => 1]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('url_checks', $expectedData);
