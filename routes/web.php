@@ -27,8 +27,8 @@ Route::get('/', function () {
         'errors' => [],
         'messages' => []
     ];
-    return view('main', $params);
-})->name('main');
+    return view('index', $params);
+})->name('main.page');
 
 Route::get('/urls', function () {
     $urlsData = DB::table('urls')
@@ -46,8 +46,8 @@ Route::get('/urls', function () {
         'messages' => [],
         'checksStatuses' => $checksStatuses
     ];
-    return view('allUrls', $params);
-})->name('allUrls');
+    return view('urls/index', $params);
+})->name('urls.index');
 
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
@@ -70,7 +70,7 @@ Route::post('/urls', function (Request $request) {
                 ->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
                 ->first()->id;
             return redirect()
-                ->route('singleUrl', ['id' => $id])
+                ->route('show.url', ['id' => $id])
                 ->withErrors(flash($errorMessage)
                 ->warning());
         }
@@ -93,7 +93,7 @@ Route::post('/urls', function (Request $request) {
         ->first()->id;
     flash('Url was added!')->success();
     return redirect()
-        ->route('singleUrl', ['id' => $addedUrlID]);
+        ->route('show.url', ['id' => $addedUrlID]);
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {
@@ -103,7 +103,7 @@ Route::get('/url/{id}', function ($id) {
 
     if ($urlData === null) {
         flash("Url does not exists!")->error();
-        return redirect()->route('allUrls')->setStatusCode(404);
+        return redirect()->route('urls.index')->setStatusCode(404);
     }
 
     $checksData = DB::table('url_checks')
@@ -116,8 +116,8 @@ Route::get('/url/{id}', function ($id) {
         'messages' => [],
         'checksData' => $checksData];
 
-    return view('singleUrl', $params);
-})->name('singleUrl');
+    return view('urls/show', $params);
+})->name('show.url');
 
 Route::post('url/{id}/checks', function ($id) {
     $url = DB::table('urls')
@@ -128,7 +128,7 @@ Route::post('url/{id}/checks', function ($id) {
         $document = new Document($url, true);
     } catch (RuntimeException $e) {
         flash("ConnectException: {$e->getMessage()}")->error();
-        return redirect()->route('singleUrl', ['id' => $id]);
+        return redirect()->route('show.url', ['id' => $id]);
     }
 
     $h1 = '';
@@ -183,12 +183,12 @@ Route::post('url/{id}/checks', function ($id) {
             ->getStatusCode();
     } catch (ConnectException $e) {
         flash("ConnectException: {$e->getMessage()}")->error();
-        return redirect()->route('singleUrl', ['id' => $id]);
+        return redirect()->route('show.url', ['id' => $id]);
     } catch (ClientException $e) {
         $statusCode = $e->getResponse()->getStatusCode();
     } catch (RequestException $e) {
         flash("RequestException: {$e->getMessage()}")->error();
-        return redirect()->route('singleUrl', ['id' => $id]);
+        return redirect()->route('show.url', ['id' => $id]);
     }
 
     try {
@@ -209,8 +209,8 @@ Route::post('url/{id}/checks', function ($id) {
         DB::commit();
     } catch (QueryException $e) {
         flash("RequestException: {$e->getMessage()}")->error();
-        return redirect()->route('singleUrl', ['id' => $id]);
+        return redirect()->route('show.url', ['id' => $id]);
     }
     flash('Url was checked')->message();
-    return redirect()->route('singleUrl', ['id' => $id]);
-})->name('checkUrl');
+    return redirect()->route('show.url', ['id' => $id]);
+})->name('check.url');
