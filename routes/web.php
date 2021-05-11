@@ -26,7 +26,7 @@ Route::get('/', function () {
 })->name('main.page');
 
 Route::get('/urls', function () {
-    $linksPerPage = 3;
+    $linksPerPage = 10;
     $urlsData = DB::table('urls')
         ->orderBy('id', 'asc')
         ->paginate($linksPerPage);
@@ -49,16 +49,13 @@ Route::post('/urls', function (Request $request) {
     $errorMessage = $validator
         ->errors()
         ->first('url.name');
-
-    // заменяем '.name' на пусто, хз как убрать по другому
-    $errorMessage = str_replace('.name', '', $errorMessage);
     if ($validator->fails()) {
-        if ($errorMessage === 'The url has already been taken.') {
+        if ($errorMessage === __('validation.unique')) { // see resources/lang/en/validation.php
             $id = DB::table('urls')
                 ->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
                 ->first()->id;
             return redirect(route('show.url', ['id' => $id]))
-                ->withErrors(flash($errorMessage)
+                ->withErrors(flash(__('validation.unique'))
                 ->warning());
         }
         return redirect(route('main.page'))
