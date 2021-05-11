@@ -26,9 +26,10 @@ Route::get('/', function () {
 })->name('main.page');
 
 Route::get('/urls', function () {
+    $linksPerPage = 3;
     $urlsData = DB::table('urls')
         ->orderBy('id', 'asc')
-        ->get();
+        ->paginate($linksPerPage);
     $checksData = DB::table('url_checks')
         ->distinct('url_id')
         ->orderBy('url_id')
