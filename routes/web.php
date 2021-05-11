@@ -56,25 +56,19 @@ Route::post('/urls', function (Request $request) {
                 ->first()->id;
             return redirect(route('show.url', ['id' => $id]))
                 ->withErrors(flash(__('validation.unique'))
-                ->warning());
+                    ->warning());
         }
         return redirect(route('main.page'))
             ->withErrors(flash($errorMessage)
                 ->error());
     }
-
-    $valideUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
-    DB::table('urls')->insertGetId(
+    $addedUrlID = DB::table('urls')->insertGetId(
         [
-            'name' => $valideUrl,
+            'name' => "{$parsedUrl['scheme']}://{$parsedUrl['host']}",
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]
     );
-
-    $addedUrlID = DB::table('urls')
-        ->where('name', $valideUrl)
-        ->first()->id;
     flash('Url was added!')->success();
     return redirect(route('show.url', ['id' => $addedUrlID]));
 })->name('urls.store');
