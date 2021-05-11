@@ -15,7 +15,6 @@
 </head>
 
 <body class="min-vh-100 d-flex flex-column">
-
 <header class="flex-shrink-0">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <a class="navbar-brand" href="{{ route('main.page') }}">Web page analyzer</a>
@@ -38,6 +37,7 @@
 @include('flash::message')
 
 @yield('content')
+
 <footer class="border-top py-3 mt-5 flex-shrink-0">
     <div class="container-lg">
         <div class="text-center">
