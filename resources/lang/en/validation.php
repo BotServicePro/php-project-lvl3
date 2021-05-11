@@ -79,7 +79,8 @@ return [
     'max' => [
         'numeric' => 'The :attribute must not be greater than :max.',
         'file' => 'The :attribute must not be greater than :max kilobytes.',
-        'string' => 'The :attribute must not be greater than :max characters.',
+        //'string' => 'The :attribute must not be greater than :max characters.',
+        'string' => 'The url must not be greater than :max characters.',
         'array' => 'The :attribute must not have more than :max items.',
     ],
     'mimes' => 'The :attribute must be a file of type: :values.',
@@ -97,7 +98,8 @@ return [
     'password' => 'The password is incorrect.',
     'present' => 'The :attribute field must be present.',
     'regex' => 'The :attribute format is invalid.',
-    'required' => 'The :attribute field is required.',
+    //'required' => 'The :attribute field is required.',
+    'required' => 'The field is required.',
     'required_if' => 'The :attribute field is required when :other is :value.',
     'required_unless' => 'The :attribute field is required unless :other is in :values.',
     'required_with' => 'The :attribute field is required when :values is present.',
@@ -117,9 +119,10 @@ return [
     'starts_with' => 'The :attribute must start with one of the following: :values.',
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid zone.',
-    'unique' => 'The :attribute has already been taken.',
+    'unique' => 'The url has already been taken.',
     'uploaded' => 'The :attribute failed to upload.',
-    'url' => 'The :attribute format is invalid.',
+    //'url' => 'The :attribute format is invalid.',
+    'url' => 'The url format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
     /*
