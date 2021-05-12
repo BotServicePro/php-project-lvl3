@@ -97,6 +97,9 @@ Route::post('url/{id}/checks', function ($id) {
 
     // Добавить позже дополнительные проверки типа Keywords, Description
 
+    if (strlen($h1) >= $dataLength) {
+        $h1 = substr($h1, $offSet, $dataLength) . '...';
+    }
     if (strlen($keywords) >= $dataLength) {
         $keywords = substr($keywords, $offSet, $dataLength) . '...';
     }
