@@ -43,7 +43,6 @@ Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
     $rules = [
-        //'url.name' => 'bail|required|url|max:100|unique:urls,name'
         'url.name' => 'bail|required|url|max:100'
     ];
     $validator = Validator::make($request->all('url'), $rules);
@@ -75,15 +74,8 @@ Route::post('/urls', function (Request $request) {
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {
-    $urlData = DB::table('urls')
-        ->where('id', $id)
-        ->first();
-
-    if ($urlData === null) {
-        flash("Url does not exists!")->error();
-        return redirect(route('urls.index'))->setStatusCode(404);
-    }
-
+    $urlData = DB::table('urls')->find($id);
+    abort_unless(DB::table('urls')->where('id', $id)->exists(), 404);
     $checksData = DB::table('url_checks')
         ->where('url_id', '=', $id)
         ->orderBy('updated_at', 'desc')
