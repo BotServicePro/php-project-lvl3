@@ -1,9 +1,6 @@
 <?php
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -84,83 +81,34 @@ Route::get('/url/{id}', function ($id) {
 })->name('show.url');
 
 Route::post('url/{id}/checks', function ($id) {
-    $url = DB::table('urls')
-        ->where('id', '=', $id)
-        ->first()->name;
-
-    try {
-        $document = new Document($url, true);
-    } catch (RuntimeException $e) {
-        flash("ConnectException: {$e->getMessage()}")->error();
-        return redirect(route('show.url', ['id' => $id]));
-    }
-
-    $h1 = '';
-    $keywords = '';
-    $description = '';
+    $url = DB::table('urls')->find($id)->name;
     $offSet = 0;
     $dataLength = 50;
-
     try {
-        $h1 = $document->find('h1')[0]->text();
-    } catch (ErrorException $e) {
+        $response = Http::get($url);
+    } catch (Exception $e) {
+            flash("ConnectException: {$e->getMessage()}")->error();
+            return redirect(route('show.url', ['id' => $id]));
     }
+    $document = new Document($response->body());
+    $h1 = optional($document->first('h1'))->text();
+    $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
+    $description = optional($document->first('meta[name=description]'))->getAttribute('content');
 
-    try {
-        $keywords = $document->find('*[name=keywords]')[0]->content;
-    } catch (ErrorException $e) {
-        if (isset($document->find('*[name=Keywords]')[0]->content)) {
-            $keywords = $document->find('*[name=Keywords]')[0]->content;
-        }
-        if (isset($document->find('*[property=og:keywords]')[0]->content)) {
-            $keywords = $document->find('*[property=og:keywords]')[0]->content;
-        }
-    }
-
-    try {
-        $description = $document->find('*[name=Description]')[0]->content;
-    } catch (ErrorException $e) {
-        if (isset($document->find('*[name=description]')[0]->content)) {
-            $description = $document->find('*[name=description]')[0]->content;
-        }
-        if (isset($document->find('*[property=og:description]')[0]->content)) {
-            $description = $document->find('*[property=og:description]')[0]->content;
-        }
-    }
-
-    if (strlen($description) >= $dataLength) {
-        $data = substr($description, $offSet, $dataLength);
-        $description = "{$data}...";
-    }
+    // Добавить позже дополнительные проверки типа Keywords, Description
 
     if (strlen($keywords) >= $dataLength) {
-        $data = substr($keywords, $offSet, $dataLength);
-        $keywords = "{$data}...";
+        $keywords = substr($keywords, $offSet, $dataLength) . '...';
     }
-
-    $client = new GuzzleHttp\Client();
-
-    try {
-        $client->request('GET', $url);
-        $statusCode = $client
-            ->request('GET', $url)
-            ->getStatusCode();
-    } catch (ConnectException $e) {
-        flash("ConnectException: {$e->getMessage()}")->error();
-        return redirect(route('show.url', ['id' => $id]));
-    } catch (ClientException $e) {
-        $statusCode = $e->getResponse()->getStatusCode();
-    } catch (RequestException $e) {
-        flash("RequestException: {$e->getMessage()}")->error();
-        return redirect(route('show.url', ['id' => $id]));
+    if (strlen($description) >= $dataLength) {
+        $description = substr($description, $offSet, $dataLength) . '...';
     }
-
     try {
         DB::beginTransaction();
         DB::table('url_checks')
             ->insert([
                 'url_id' => $id,
-                'status_code' => $statusCode,
+                'status_code' => $response->status(),
                 'h1' => mb_convert_encoding($h1, 'UTF-8'),
                 'keywords' => mb_convert_encoding($keywords, 'UTF-8'),
                 'description' => mb_convert_encoding($description, 'UTF-8'),
@@ -171,7 +119,7 @@ Route::post('url/{id}/checks', function ($id) {
             ->where('id', $id)
             ->update(['updated_at' => Carbon::now()]);
         DB::commit();
-    } catch (QueryException $e) {
+    } catch (Exception $e) {
         flash("RequestException: {$e->getMessage()}")->error();
         return redirect(route('show.url', ['id' => $id]));
     }
