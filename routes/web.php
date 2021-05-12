@@ -43,34 +43,35 @@ Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
     $rules = [
-        'url.name' => 'bail|required|url|max:100|unique:urls,name'
+        //'url.name' => 'bail|required|url|max:100|unique:urls,name'
+        'url.name' => 'bail|required|url|max:100'
     ];
     $validator = Validator::make($request->all('url'), $rules);
     $errorMessage = $validator
         ->errors()
         ->first('url.name');
     if ($validator->fails()) {
-        if ($errorMessage === __('validation.unique')) { // see resources/lang/en/validation.php
-            $id = DB::table('urls')
-                ->where('name', "{$parsedUrl['scheme']}://{$parsedUrl['host']}")
-                ->first()->id;
-            return redirect(route('show.url', ['id' => $id]))
-                ->withErrors(flash(__('validation.unique'))
-                    ->warning());
-        }
+        flash($errorMessage)->error();
         return redirect(route('main.page'))
-            ->withErrors(flash($errorMessage)
-                ->error());
+            ->withErrors($validator);
     }
-    $addedUrlID = DB::table('urls')->insertGetId(
-        [
-            'name' => "{$parsedUrl['scheme']}://{$parsedUrl['host']}",
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]
-    );
-    flash('Url was added!')->success();
-    return redirect(route('show.url', ['id' => $addedUrlID]));
+    $validatedUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
+    if (DB::table('urls')->where('name', $validatedUrl)->exists()) {
+        flash(__('validation.unique'))->warning();
+        $id = DB::table('urls')
+            ->where('name', $validatedUrl)
+            ->first()->id;
+    } else {
+        flash('Url was added!')->success();
+        $id = DB::table('urls')->insertGetId(
+            [
+                'name' => $validatedUrl,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        );
+    }
+    return redirect(route('show.url', ['id' => $id]));
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {
