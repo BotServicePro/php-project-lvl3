@@ -94,7 +94,9 @@ Route::post('url/{id}/checks', function ($id) {
     $h1 = optional($document->first('h1'))->text();
     $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
     $description = optional($document->first('meta[name=description]'))->getAttribute('content');
+
     // Добавить позже дополнительные проверки типа Keywords, Description
+
     if (strlen($h1) >= $dataLength) {
         $h1 = substr($h1, $offSet, $dataLength) . '...';
     }
