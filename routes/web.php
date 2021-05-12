@@ -87,7 +87,7 @@ Route::post('url/{id}/checks', function ($id) {
     try {
         $response = Http::get($url);
     } catch (Exception $e) {
-            flash("ConnectException: {$e->getMessage()}")->error();
+            flash("Exception: {$e->getMessage()}")->error();
             return redirect(route('show.url', ['id' => $id]));
     }
     $document = new Document($response->body());
@@ -120,7 +120,7 @@ Route::post('url/{id}/checks', function ($id) {
             ->update(['updated_at' => Carbon::now()]);
         DB::commit();
     } catch (Exception $e) {
-        flash("RequestException: {$e->getMessage()}")->error();
+        flash("Exception: {$e->getMessage()}")->error();
         return redirect(route('show.url', ['id' => $id]));
     }
     flash('Url was checked')->message();
