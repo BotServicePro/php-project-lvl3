@@ -14,7 +14,8 @@
         "laravel/telescope": "^4.4",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
-        "nesbot/carbon": "^2.46"
+        "nesbot/carbon": "^2.46",
+      "ext-pdo": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
