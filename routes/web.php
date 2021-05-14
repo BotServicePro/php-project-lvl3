@@ -82,8 +82,6 @@ Route::get('/url/{id}', function ($id) {
 
 Route::post('url/{id}/checks', function ($id) {
     $url = DB::table('urls')->find($id)->name;
-    $offSet = 0;
-    $dataLength = 50;
     try {
         $response = Http::get($url);
     } catch (Exception $e) {
@@ -97,15 +95,6 @@ Route::post('url/{id}/checks', function ($id) {
 
     // Добавить позже дополнительные проверки типа Keywords, Description
 
-    if (strlen($h1) >= $dataLength) {
-        $h1 = substr($h1, $offSet, $dataLength) . '...';
-    }
-    if (strlen($keywords) >= $dataLength) {
-        $keywords = substr($keywords, $offSet, $dataLength) . '...';
-    }
-    if (strlen($description) >= $dataLength) {
-        $description = substr($description, $offSet, $dataLength) . '...';
-    }
     try {
         DB::beginTransaction();
         DB::table('url_checks')
