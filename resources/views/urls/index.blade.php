@@ -15,7 +15,7 @@
                     <th>Last updated</th>
                     <th>Responsee answer</th>
                 </tr>
-                @foreach ($urlsData as $url)
+                @foreach ($urls as $url)
                     <tr>
                         <td>{{ $url->id }}</td>
                         <td><a href="{{ route('show.url', ['id' => $url->id]) }}">{{ $url->name }}</a></td>
@@ -28,7 +28,7 @@
                     </tr>
                 @endforeach
             </table>
-            {{ $urlsData->links() }}
+            {{ $urls->links() }}
         </div>
     </div>
 @endsection
