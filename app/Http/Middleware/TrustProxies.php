@@ -12,7 +12,7 @@ class TrustProxies extends Middleware
      *
      * @var array|string|null
      */
-    protected $proxies = '*';
+    protected $proxies = '*'; // установили для успешной загрузки стилей под https
 
     /**
      * The headers that should be used to detect proxies.
