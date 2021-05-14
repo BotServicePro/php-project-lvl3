@@ -33,26 +33,4 @@ class UrlsTest extends TestCase
         $response->assertRedirect(route('show.url', ['id' => 1]));
         $this->assertDatabaseHas('urls', $urlData);
     }
-
-    public function testIncorrectStoreUrl(): void
-    {
-        $urlData = ['name' => 'https:gmail.com'];
-        $response = $this->post(route('urls.store'), ['url' => $urlData]);
-        $response->assertSessionHasErrors();
-    }
-
-    public function testTooLongStoreUrl(): void
-    {
-        $tooLongDomain = str_repeat('domain', 20);
-        $urlData = ['name' => "http://{$tooLongDomain}.com"];
-        $response = $this->post(route('urls.store'), ['url' => $urlData]);
-        $response->assertSessionHas('flash_notification.0.message', 'The url must not be greater than 100 characters.');
-    }
-
-    public function testInvalideStoreUrl(): void
-    {
-        $urlData = ['name' => "hp://test.com"];
-        $response = $this->post(route('urls.store'), ['url' => $urlData]);
-        $response->assertSessionHas('flash_notification.0.message', 'The url format is invalid.');
-    }
 }
