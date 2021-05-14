@@ -16,8 +16,9 @@ class ChecksTest extends TestCase
      */
     public function testUrlCheck()
     {
-        DB::table('urls')->insert(
-            ['name' => 'https://php.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+        $url = 'https://php.ru';
+        $id = DB::table('urls')->insertGetId(
+            ['name' => $url, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
         $fakeHtml = file_get_contents('tests/fixtures/testpage.html');
         $expectedData = [
@@ -27,8 +28,8 @@ class ChecksTest extends TestCase
             'description' => 'Форум PHP программистов, док?...',
             'h1' => 'Новости'
         ];
-        Http::fake(['https://php.ru' => Http::response($fakeHtml, 200)]);
-        $response = $this->post(route('check.url', ['id' => 1]));
+        Http::fake([$url => Http::response($fakeHtml, 200)]);
+        $response = $this->post(route('check.url', ['id' => $id]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('url_checks', $expectedData);
