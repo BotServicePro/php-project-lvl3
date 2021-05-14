@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class UrlsTest extends TestCase
@@ -19,21 +17,12 @@ class UrlsTest extends TestCase
         $response->assertOk();
     }
 
-    public function testSingleUrl()
+    public function testShow()
     {
         $urlData = ['name' => "http://test.com"];
         $this->post(route('urls.store'), ['url' => $urlData]);
         $response = $this->get(route('show.url', ['id' => 1]));
         $response->assertOk();
-    }
-
-    public function testSingleUrlNotFound()
-    {
-        DB::table('urls')->insert( // записываем в бд новый линк
-            ['name' => 'http://123.ru', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-        );
-        $response = $this->get(route('show.url', ['id' => 88]));
-        $response->assertStatus(404);
     }
 
     public function testStore(): void
