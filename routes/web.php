@@ -72,7 +72,7 @@ Route::post('/urls', function (Request $request) {
 
 Route::get('/url/{id}', function ($id) {
     $url = DB::table('urls')->find($id);
-    abort_unless(DB::table('urls')->where('id', $id)->exists(), 404);
+    abort_unless($url, 404);
     $checksData = DB::table('url_checks')
         ->where('url_id', '=', $id)
         ->orderBy('updated_at', 'desc')
