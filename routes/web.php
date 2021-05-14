@@ -33,7 +33,7 @@ Route::get('/urls', function () {
         ->orderBy('created_at', 'desc')
         ->get()
         ->keyBy('url_id');
-    return view('urls/index', compact('urls', 'lastChecks'));
+    return view('urls.index', compact('urls', 'lastChecks'));
 })->name('urls.index');
 
 Route::post('/urls', function (Request $request) {
@@ -77,7 +77,7 @@ Route::get('/url/{id}', function ($id) {
         ->where('url_id', '=', $id)
         ->orderBy('updated_at', 'desc')
         ->get();
-    return view('urls/show', compact('urlData', 'checksData'));
+    return view('urls.show', compact('urlData', 'checksData'));
 })->name('show.url');
 
 Route::post('url/{id}/checks', function ($id) {
