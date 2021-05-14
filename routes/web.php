@@ -82,6 +82,7 @@ Route::get('/url/{id}', function ($id) {
 
 Route::post('url/{id}/checks', function ($id) {
     $url = DB::table('urls')->find($id)->name;
+    abort_unless($url, 404);
     try {
         $response = Http::get($url);
     } catch (Exception $e) {
