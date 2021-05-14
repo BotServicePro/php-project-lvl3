@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -85,10 +86,11 @@ Route::post('url/{id}/checks', function ($id) {
     abort_unless($url, 404);
     try {
         $response = Http::get($url);
-    } catch (Exception $e) {
+    } catch (ConnectionException $e) {
             flash("Exception: {$e->getMessage()}")->error();
             return redirect(route('show.url', ['id' => $id]));
     }
+
     $document = new Document($response->body());
     $h1 = optional($document->first('h1'))->text();
     $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
@@ -96,26 +98,19 @@ Route::post('url/{id}/checks', function ($id) {
 
     // Добавить позже дополнительные проверки типа Keywords, Description
 
-    try {
-        DB::beginTransaction();
-        DB::table('url_checks')
-            ->insert([
-                'url_id' => $id,
-                'status_code' => $response->status(),
-                'h1' => mb_convert_encoding($h1, 'UTF-8'),
-                'keywords' => mb_convert_encoding($keywords, 'UTF-8'),
-                'description' => mb_convert_encoding($description, 'UTF-8'),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        DB::table('urls')
-            ->where('id', $id)
-            ->update(['updated_at' => Carbon::now()]);
-        DB::commit();
-    } catch (Exception $e) {
-        flash("Exception: {$e->getMessage()}")->error();
-        return redirect(route('show.url', ['id' => $id]));
-    }
+    DB::table('url_checks')
+        ->insert([
+            'url_id' => $id,
+            'status_code' => $response->status(),
+            'h1' => mb_convert_encoding($h1, 'UTF-8'),
+            'keywords' => mb_convert_encoding($keywords, 'UTF-8'),
+            'description' => mb_convert_encoding($description, 'UTF-8'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+    DB::table('urls')
+        ->where('id', $id)
+        ->update(['updated_at' => Carbon::now()]);
     flash('Url was checked')->message();
     return redirect(route('show.url', ['id' => $id]));
 })->name('check.url');
