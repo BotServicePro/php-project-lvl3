@@ -27,13 +27,13 @@ Route::get('/urls', function () {
     $urls = DB::table('urls')
         ->orderBy('id', 'asc')
         ->paginate($linksPerPage);
-    $checksData = DB::table('url_checks')
+    $lastChecks = DB::table('url_checks')
         ->distinct('url_id')
         ->orderBy('url_id')
         ->orderBy('created_at', 'desc')
         ->get()
         ->keyBy('url_id');
-    return view('urls/index', compact('urls', 'checksData'));
+    return view('urls/index', compact('urls', 'lastChecks'));
 })->name('urls.index');
 
 Route::post('/urls', function (Request $request) {
