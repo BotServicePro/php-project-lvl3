@@ -86,11 +86,10 @@ Route::post('url/{id}/checks', function ($id) {
     abort_unless($url, 404);
     try {
         $response = Http::get($url);
-    } catch (ConnectionException $e) {
+    } catch (Exception | ConnectionException $e) {
             flash("Exception: {$e->getMessage()}")->error();
             return redirect(route('show.url', ['id' => $id]));
     }
-
     $document = new Document($response->body());
     $h1 = optional($document->first('h1'))->text();
     $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
