@@ -24,7 +24,7 @@ Route::get('/', function () {
 
 Route::get('/urls', function () {
     $linksPerPage = 10;
-    $urlsData = DB::table('urls')
+    $urls = DB::table('urls')
         ->orderBy('id', 'asc')
         ->paginate($linksPerPage);
     $checksData = DB::table('url_checks')
@@ -33,7 +33,7 @@ Route::get('/urls', function () {
         ->orderBy('created_at', 'desc')
         ->get()
         ->keyBy('url_id');
-    return view('urls/index', compact('urlsData', 'checksData'));
+    return view('urls/index', compact('urls', 'checksData'));
 })->name('urls.index');
 
 Route::post('/urls', function (Request $request) {
