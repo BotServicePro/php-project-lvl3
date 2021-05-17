@@ -42,6 +42,10 @@ return [
     |
     */
 
+    'ignoreCommands' => [
+        'migrate'
+    ],
+
     'driver' => env('TELESCOPE_DRIVER', 'database'),
 
     'storage' => [
