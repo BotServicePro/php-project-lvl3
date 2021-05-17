@@ -14,7 +14,7 @@ class UrlsTest extends TestCase
     public function testIndex()
     {
         $response = $this->get(route('urls.index'));
-        $response->assertOk();
+        $response->assertStatus(404);
     }
 
     public function testShow()
