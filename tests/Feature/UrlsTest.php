@@ -14,7 +14,7 @@ class UrlsTest extends TestCase
     public function testIndex()
     {
         $response = $this->get(route('urls.index'));
-        $response->assertStatus(404);
+        $response->assertStatus(200);
     }
 
     public function testShow()
@@ -22,8 +22,7 @@ class UrlsTest extends TestCase
         $urlData = ['name' => "http://test.com"];
         $this->post(route('urls.store'), ['url' => $urlData]);
         $response = $this->get(route('show.url', ['id' => 1]));
-        //$response->assertOk();
-        $response->assertStatus(404);
+        $response->assertOk();
     }
 
     public function testStore(): void
