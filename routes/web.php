@@ -68,7 +68,7 @@ Route::post('/urls', function (Request $request) {
             ]
         );
     }
-    return redirect(route('show.url', ['id' => $id]));
+    return redirect(route('urls.show', ['id' => $id]));
 })->name('urls.store');
 
 Route::get('/url/{id}', function ($id) {
@@ -79,7 +79,7 @@ Route::get('/url/{id}', function ($id) {
         ->orderBy('updated_at', 'desc')
         ->get();
     return view('urls.show', compact('url', 'checksData'));
-})->name('show.url');
+})->name('urls.show');
 
 Route::post('url/{id}/checks', function ($id) {
     $url = DB::table('urls')->find($id)->name;
@@ -88,7 +88,7 @@ Route::post('url/{id}/checks', function ($id) {
         $response = Http::get($url);
     } catch (Exception | ConnectionException $e) {
             flash("Exception: {$e->getMessage()}")->error();
-            return redirect(route('show.url', ['id' => $id]));
+            return redirect(route('urls.show', ['id' => $id]));
     }
     $document = new Document($response->body());
     $h1 = optional($document->first('h1'))->text();
@@ -111,5 +111,5 @@ Route::post('url/{id}/checks', function ($id) {
         ->where('id', $id)
         ->update(['updated_at' => Carbon::now()]);
     flash('Url was checked')->message();
-    return redirect(route('show.url', ['id' => $id]));
+    return redirect(route('urls.show', ['id' => $id]));
 })->name('check.url');
