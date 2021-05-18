@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class UrlsTest extends TestCase
 {
-    private $id = (int) 1;
+    private $id = 1;
 
     protected function setUp(): void
     {
