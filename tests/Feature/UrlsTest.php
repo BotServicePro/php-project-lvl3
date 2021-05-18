@@ -43,10 +43,13 @@ class UrlsTest extends TestCase
         $id = DB::table('urls')->insertGetId(
             ['name' => "http://test.com", 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
+        $url = optional(DB::table('urls')->where('name', '=', 'http://test.com')->get())[0]->name;
+        dump($url);
+
         $response = $this->get(route('show.url', ['id' => $id]));
         $response->assertOk();
         $response->assertStatus(200);
-        $response->assertSee("http://test.com");
+        $response->assertSee($url);
         $response = $this->get(route('show.url', ['id' => 777]));
         $response->assertStatus(404);
     }
