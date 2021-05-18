@@ -19,11 +19,11 @@ use DiDom\Document;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
+Route::get('/', function (): object {
     return view('index');
 })->name('main.page');
 
-Route::get('/urls', function () {
+Route::get('/urls', function (): object {
     $linksPerPage = 10;
     $urls = DB::table('urls')
         ->orderBy('id', 'asc')

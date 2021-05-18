@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class UrlsTest extends TestCase
 {
-    private $id = 1;
+    private $id = (int) 1;
 
     protected function setUp(): void
     {
@@ -27,7 +27,7 @@ class UrlsTest extends TestCase
         $response->assertOk();
     }
 
-    public function testShow()
+    public function testShow(): void
     {
         $response = $this->get(route('urls.show', ['id' => $this->id]));
         $response->assertOk();
