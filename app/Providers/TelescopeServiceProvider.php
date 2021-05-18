@@ -73,7 +73,5 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 //                'taylor@laravel.com',
 //            ]);
 //        });
-
-
     }
 }
