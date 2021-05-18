@@ -19,6 +19,11 @@ class UrlsTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
     public function testShow()
     {
         $id = DB::table('urls')->insertGetId(
