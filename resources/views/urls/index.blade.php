@@ -18,7 +18,7 @@
                 @foreach ($urls as $url)
                     <tr>
                         <td>{{ $url->id }}</td>
-                        <td><a href="{{ route('show.url', ['id' => $url->id]) }}">{{ $url->name }}</a></td>
+                        <td><a href="{{ route('urls.show', ['id' => $url->id]) }}">{{ $url->name }}</a></td>
                         <td>{{ $url->updated_at }}</td>
                     <td>
                     @isset($lastChecks[$url->id]->status_code)
