@@ -13,11 +13,11 @@ class UrlsTest extends TestCase
      *
      * @return void
      */
-    public function testIndex()
-    {
-        $response = $this->get(route('urls.index'));
-        $response->assertStatus(200);
-    }
+//    public function testIndex()
+//    {
+//        $response = $this->get(route('urls.index'));
+//        $response->assertStatus(200);
+//    }
 
     /**
      * A basic feature test examplsdfe.
