@@ -2,19 +2,19 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class UrlsTest extends TestCase
 {
-    use DatabaseTransactions;
+    private $id = 1;
 
     protected function setUp(): void
     {
         parent::setUp();
         DB::table('urls')->insert([
+            'id' => $this->id,
             'name' => "http://test.com",
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
@@ -29,8 +29,8 @@ class UrlsTest extends TestCase
 
     public function testShow()
     {
-        $response = $this->get(route('urls.show', ['id' => 1]));
-        $response->assertStatus(200);
+        $response = $this->get(route('urls.show', ['id' => $this->id]));
+        $response->assertOk();
     }
 
     public function testStore(): void
