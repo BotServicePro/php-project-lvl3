@@ -26,16 +26,15 @@ class UrlsTest extends TestCase
             ['name' => $url, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
         $response = $this->get(route('show.url', ['id' => $id]));
-        //$response->assertStatus(200);
-        $response->assertOk();
+        $response->assertStatus(200);
     }
 
-    public function testStore(): void
-    {
-        $urlData = ['name' => 'https://example.com'];
-        $response = $this->post(route('urls.store'), ['url' => $urlData]);
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('show.url', ['id' => 1]));
-        $this->assertDatabaseHas('urls', $urlData);
-    }
+//    public function testStore(): void
+//    {
+//        $urlData = ['name' => 'https://example.com'];
+//        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+//        $response->assertSessionHasNoErrors();
+//        $response->assertRedirect(route('show.url', ['id' => 1]));
+//        $this->assertDatabaseHas('urls', $urlData);
+//    }
 }
