@@ -37,11 +37,6 @@ Route::get('/urls', function (): object {
     return view('urls.index', compact('urls', 'lastChecks'));
 })->name('urls.index');
 
-/**
- * Post url.
- *
- * @return Illuminate\Http\RedirectResponse
- */
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
@@ -76,11 +71,6 @@ Route::post('/urls', function (Request $request) {
     return redirect(route('urls.show', ['id' => $id]));
 })->name('urls.store');
 
-/**
- * Get single url.
- *
- * @return Illuminate\View\View
- */
 Route::get('/urls/{id}', function ($id) {
     $url = DB::table('urls')->find($id);
     abort_unless($url, 404);
@@ -91,11 +81,6 @@ Route::get('/urls/{id}', function ($id) {
     return view('urls.show', compact('url', 'checksData'));
 })->name('urls.show');
 
-/**
- * Post check.
- *
- * @return Illuminate\Http\RedirectResponse
- */
 Route::post('urls/{id}/checks', function ($id) {
     $url = DB::table('urls')->find($id)->name;
     abort_unless($url, 404);
