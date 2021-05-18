@@ -29,7 +29,7 @@ class UrlsTest extends TestCase
         $urlData = ['name' => 'https://example.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('show.url', ['id' => 1]));
+        $response->assertRedirect(route('urls.show', ['id' => 1]));
         $this->assertDatabaseHas('urls', $urlData);
     }
 
@@ -43,14 +43,11 @@ class UrlsTest extends TestCase
         $id = DB::table('urls')->insertGetId(
             ['name' => "http://test.com", 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
-        $url = optional(DB::table('urls')->where('name', '=', 'http://test.com')->get())[0]->name;
-        dump($url);
-
-        $response = $this->get(route('show.url', ['id' => $id]));
+        $response = $this->get(route('urls.show', ['id' => $id]));
         $response->assertOk();
         $response->assertStatus(200);
-        $response->assertSee($url);
-        $response = $this->get(route('show.url', ['id' => 777]));
+        $response->assertSee("http://test.com");
+        $response = $this->get(route('urls.show', ['id' => 777]));
         $response->assertStatus(404);
     }
 }
