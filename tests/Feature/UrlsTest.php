@@ -26,10 +26,12 @@ class UrlsTest extends TestCase
         );
 
         $response = $this->get(route('show.url', ['id' => $id]));
-        $response->assertSee('http://test.com');
+        //dump(DB::table('urls')->select('name')->where('id', '=', $id)->get());
+        $response->assertStatus(200);
+        $response->assertSee("http://test.com");
 //
-//        $response = $this->get(route('show.url', ['id' => 777]));
-//        $response->assertStatus(404);
+        $response = $this->get(route('show.url', ['id' => 777]));
+        $response->assertStatus(404);
     }
 
     public function testStore(): void
