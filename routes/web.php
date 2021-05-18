@@ -19,7 +19,6 @@ use DiDom\Document;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function (): object {
     return view('index');
 })->name('main.page');
@@ -39,7 +38,7 @@ Route::get('/urls', function (): object {
 })->name('urls.index');
 
 /**
- * Display a home page.
+ * Post url.
  *
  * @return Illuminate\Http\RedirectResponse
  */
@@ -77,6 +76,11 @@ Route::post('/urls', function (Request $request) {
     return redirect(route('urls.show', ['id' => $id]));
 })->name('urls.store');
 
+/**
+ * Get single url.
+ *
+ * @return Illuminate\View\View
+ */
 Route::get('/urls/{id}', function ($id) {
     $url = DB::table('urls')->find($id);
     abort_unless($url, 404);
@@ -87,6 +91,11 @@ Route::get('/urls/{id}', function ($id) {
     return view('urls.show', compact('url', 'checksData'));
 })->name('urls.show');
 
+/**
+ * Post check.
+ *
+ * @return Illuminate\Http\RedirectResponse
+ */
 Route::post('urls/{id}/checks', function ($id) {
     $url = DB::table('urls')->find($id)->name;
     abort_unless($url, 404);
