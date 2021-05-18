@@ -19,6 +19,7 @@ use DiDom\Document;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function (): object {
     return view('index');
 })->name('main.page');
@@ -37,6 +38,11 @@ Route::get('/urls', function (): object {
     return view('urls.index', compact('urls', 'lastChecks'));
 })->name('urls.index');
 
+/**
+ * Display a home page.
+ *
+ * @return Illuminate\Http\RedirectResponse
+ */
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);

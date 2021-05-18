@@ -14,7 +14,7 @@ class ChecksTest extends TestCase
      *
      * @return void
      */
-    public function testUrlCheck(): void
+    public function testUrlCheck()
     {
         $url = 'https://php.ru';
         $id = DB::table('urls')->insertGetId(
