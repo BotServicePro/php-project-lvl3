@@ -81,7 +81,7 @@ Route::get('/url/{id}', function ($id) {
     return view('urls.show', compact('url', 'checksData'));
 })->name('urls.show');
 
-Route::post('url/{id}/checks', function ($id) {
+Route::post('urls/{id}/checks', function ($id) {
     $url = DB::table('urls')->find($id)->name;
     abort_unless($url, 404);
     try {
