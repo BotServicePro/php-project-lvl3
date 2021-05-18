@@ -22,20 +22,20 @@ class UrlsTest extends TestCase
         ]);
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $response = $this->get(route('urls.index'));
         $response->assertOk();
     }
 
-    public function testShow()
+    public function testShow(): void
     {
         $response = $this->get(route('urls.show', ['id' => $this->id]));
         $response->assertOk();
         $response->assertStatus(200);
     }
 
-    public function testStore()
+    public function testStore(): void
     {
         $urlData = ['name' => 'https://example.com'];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
