@@ -30,7 +30,7 @@ class UrlsTest extends TestCase
     public function testShow()
     {
         $response = $this->get(route('urls.show', ['id' => $this->id]));
-        $response->assertOk();
+        $response->assertStatus(200);
     }
 
     public function testStore(): void
