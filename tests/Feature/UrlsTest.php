@@ -20,7 +20,21 @@ class UrlsTest extends TestCase
     }
 
     /**
-     * Single url test.
+     * Store url test.
+     *
+     * @return void
+     */
+    public function testStore(): void
+    {
+        $urlData = ['name' => 'https://example.com'];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('show.url', ['id' => 1]));
+        $this->assertDatabaseHas('urls', $urlData);
+    }
+
+    /**
+     * Show single url test.
      *
      * @return void
      */
@@ -35,19 +49,5 @@ class UrlsTest extends TestCase
         $response->assertSee("http://test.com");
         $response = $this->get(route('show.url', ['id' => 777]));
         $response->assertStatus(404);
-    }
-
-    /**
-     * Store url test.
-     *
-     * @return void
-     */
-    public function testStore(): void
-    {
-        $urlData = ['name' => 'https://example.com'];
-        $response = $this->post(route('urls.store'), ['url' => $urlData]);
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('show.url', ['id' => 1]));
-        $this->assertDatabaseHas('urls', $urlData);
     }
 }
