@@ -21,7 +21,7 @@ class UrlsTest extends TestCase
         ]);
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $response = $this->get(route('urls.index'));
         $response->assertOk();
@@ -31,7 +31,12 @@ class UrlsTest extends TestCase
     {
         $response = $this->get(route('urls.show', ['id' => $this->id]));
         $response->assertOk();
+        $response->assertStatus(200);
+        $response->assertSee("http://test.com");
+        $response = $this->get(route('urls.show', ['id' => 777]));
+        $response->assertStatus(404);
     }
+
 
     public function testStore(): void
     {
