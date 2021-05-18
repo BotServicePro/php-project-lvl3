@@ -13,21 +13,21 @@ class UrlsTest extends TestCase
      *
      * @return void
      */
-    public function testIndex()
-    {
-        $response = $this->get(route('urls.index'));
-        $response->assertStatus(200);
-    }
-
-    public function testShow()
-    {
-        $url = "http://test.com";
-        $id = DB::table('urls')->insertGetId(
-            ['name' => $url, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
-        );
-        $response = $this->get(route('show.url', ['id' => $id]));
-        $response->assertStatus(200);
-    }
+//    public function testIndex()
+//    {
+//        $response = $this->get(route('urls.index'));
+//        $response->assertStatus(200);
+//    }
+//
+//    public function testShow()
+//    {
+//        $url = "http://test.com";
+//        $id = DB::table('urls')->insertGetId(
+//            ['name' => $url, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+//        );
+//        $response = $this->get(route('show.url', ['id' => $id]));
+//        $response->assertStatus(200);
+//    }
 
 //    public function testStore(): void
 //    {
