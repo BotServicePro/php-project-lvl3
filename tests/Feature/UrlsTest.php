@@ -26,7 +26,8 @@ class UrlsTest extends TestCase
             ['name' => $url, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
         );
         $response = $this->get(route('show.url', ['id' => $id]));
-        $response->assertStatus(200);
+        //$response->assertStatus(200);
+        $response->assertOk();
     }
 
     public function testStore(): void
