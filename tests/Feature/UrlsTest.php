@@ -2,12 +2,15 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class UrlsTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -18,33 +21,18 @@ class UrlsTest extends TestCase
         ]);
     }
 
-    /**
-     * Urls index test.
-     *
-     * @return void
-     */
     public function testIndex()
     {
         $response = $this->get(route('urls.index'));
         $response->assertStatus(200);
     }
 
-    /**
-     * Show single url test.
-     *
-     * @return void
-     */
     public function testShow()
     {
         $response = $this->get(route('urls.show', ['id' => 1]));
-        $response->assertOk();
+        $response->assertStatus(200);
     }
 
-    /**
-     * Store url test.
-     *
-     * @return void
-     */
     public function testStore(): void
     {
         $urlData = ['name' => 'https://example.com'];
