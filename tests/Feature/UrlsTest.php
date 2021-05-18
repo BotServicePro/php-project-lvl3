@@ -29,8 +29,9 @@ class UrlsTest extends TestCase
 
     public function testShow()
     {
-        $response = $this->get(route('urls.show', ['id' => $this->id]));
+        $response = $this->get(route('urls.show', ['id' => 1]));
         $response->assertStatus(200);
+        dump($response->getStatusCode());
     }
 
     public function testStore(): void
