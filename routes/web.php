@@ -38,6 +38,7 @@ Route::get('/urls', function (): object {
 })->name('urls.index');
 
 /**
+ * @param $request
  * @return Illuminate\Http\RedirectResponse
  */
 Route::post('/urls', function (Request $request) {
