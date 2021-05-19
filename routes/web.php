@@ -72,7 +72,7 @@ Route::post('/urls', function (Request $request) {
     return redirect(route('urls.show', ['id' => $id]));
 })->name('urls.store');
 
-Route::get('/urls/{id}', function ($id) {
+Route::get('/urls/{id}', function ($id): Illuminate\View\View {
     $url = DB::table('urls')->find($id);
     abort_unless($url, 404);
     $checksData = DB::table('url_checks')
