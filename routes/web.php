@@ -38,7 +38,7 @@ Route::get('/urls', function (): object {
 })->name('urls.index');
 
 
-Route::post('/urls', function (Request $request) {
+Route::post('/urls', function (Request $request): Illuminate\Http\RedirectResponse {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
     $rules = [
@@ -82,7 +82,7 @@ Route::get('/urls/{id}', function ($id): Illuminate\View\View {
     return view('urls.show', compact('url', 'checksData'));
 })->name('urls.show');
 
-Route::post('urls/{id}/checks', function ($id) {
+Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse {
     $url = DB::table('urls')->find($id)->name;
     abort_unless($url, 404);
     try {
