@@ -34,13 +34,10 @@ Route::get('/urls', function (): object {
         ->orderBy('created_at', 'desc')
         ->get()
         ->keyBy('url_id');
-    return view('urls.index', ['urls' => $urls, 'lastChecks' => $lastChecks]);
+    return view('urls.index', compact('urls', 'lastChecks'));
 })->name('urls.index');
 
-/**
- * @param $request
- * @return Illuminate\Http\RedirectResponse
- */
+
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
     $parsedUrl = parse_url($url);
@@ -82,7 +79,7 @@ Route::get('/urls/{id}', function ($id) {
         ->where('url_id', '=', $id)
         ->orderBy('updated_at', 'desc')
         ->get();
-    return view('urls.show', ['url' => $url, 'checksData' => $checksData]);
+    return view('urls.show', compact('url', 'checksData'));
 })->name('urls.show');
 
 Route::post('urls/{id}/checks', function ($id) {
