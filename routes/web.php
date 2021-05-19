@@ -38,9 +38,7 @@ Route::get('/urls', function (): object {
 })->name('urls.index');
 
 /**
- * Create a new class instance.
- *
- * @param  Illuminate\Http\RedirectResponse
+ * @return Illuminate\Http\RedirectResponse
  */
 Route::post('/urls', function (Request $request) {
     $url = mb_strtolower($request->input('url')['name']);
