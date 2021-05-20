@@ -113,4 +113,4 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
         ->update(['updated_at' => Carbon::now()]);
     flash('Url was checked')->message();
     return redirect(route('urls.show', ['id' => $id]));
-})->name('check.url');
+})->name('urls.checks.store');
