@@ -9,17 +9,17 @@ use Tests\TestCase;
 class UrlsTest extends TestCase
 {
     /** @var int */
-    private $id = 1;
+    private $id;
 
     protected function setUp(): void
     {
         parent::setUp();
-        DB::table('urls')->insert([
-            'id' => $this->id,
+        $id = DB::table('urls')->insertGetId([
             'name' => "http://test.com",
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+        $this->id = $id;
     }
 
     public function testIndex(): void
