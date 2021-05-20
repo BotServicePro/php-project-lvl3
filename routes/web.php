@@ -58,7 +58,6 @@ Route::post('/urls', function (Request $request): Illuminate\Http\RedirectRespon
     if (DB::table('urls')->where('name', $validatedUrl)->exists()) {
         flash(__('validation.unique'))->warning();
         $id = DB::table('urls')
-            ->select('id')
             ->where('name', $validatedUrl)
             ->value('id');
     } else {
