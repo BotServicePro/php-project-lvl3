@@ -9,7 +9,9 @@ use Tests\TestCase;
 
 class UrlCheckTest extends TestCase
 {
+    /** @var int */
     private $id;
+    /** @var string */
     private $url;
 
     protected function setUp(): void
@@ -24,7 +26,7 @@ class UrlCheckTest extends TestCase
         $this->id = $id;
         $this->url = $url;
     }
-    public function testStore()
+    public function testStore(): void
     {
         $fakeHtml = file_get_contents('tests/fixtures/testpage.html');
         $expectedData = [
