@@ -30,7 +30,7 @@ class UrlCheckTest extends TestCase
     {
         $fixturePath = 'tests/fixtures/testpage.html';
         try {
-            $fakeHtml = file_get_contents($fixturePath);
+            $fakeHtml = (string) file_get_contents($fixturePath);
         } catch (\Exception $e) {
             echo "Something wrong with fixture or fixture path: {$e}";
             return;
