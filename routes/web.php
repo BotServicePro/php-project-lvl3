@@ -88,7 +88,7 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
     abort_unless($url, 404);
     try {
         $response = Http::get($url);
-        $document = new Document($response->getBody()->getContents());
+        $document = new Document($response->body());
         $h1 = optional($document->first('h1'))->text();
         $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
         $description = optional($document->first('meta[name=description]'))->getAttribute('content');
@@ -102,13 +102,12 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
+        DB::table('urls')
+            ->where('id', $id)
+            ->update(['updated_at' => Carbon::now()]);
+        flash('Url was checked')->message();
     } catch (RequestException | ConnectionException $e) {
             flash("Exception: {$e->getMessage()}")->error();
-            //return redirect(route('urls.show', ['id' => $id]));
     }
-    DB::table('urls')
-        ->where('id', $id)
-        ->update(['updated_at' => Carbon::now()]);
-    flash('Url was checked')->message();
     return redirect(route('urls.show', ['id' => $id]));
 })->name('urls.checks.store');
