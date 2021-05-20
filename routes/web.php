@@ -88,7 +88,7 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
     abort_unless($url, 404);
     try {
         $response = Http::get($url);
-        $document = new Document($response->body());
+        $document = new Document($response->getBody()->getContents());
         $h1 = optional($document->first('h1'))->text();
         $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
         $description = optional($document->first('meta[name=description]'))->getAttribute('content');
@@ -104,7 +104,7 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
             ]);
     } catch (RequestException | ConnectionException $e) {
             flash("Exception: {$e->getMessage()}")->error();
-            return redirect(route('urls.show', ['id' => $id]));
+            //return redirect(route('urls.show', ['id' => $id]));
     }
     DB::table('urls')
         ->where('id', $id)
