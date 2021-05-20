@@ -33,11 +33,11 @@ In console:
    
    DB_PORT=5432
    
-   DB_DATABASE=databasename
+   DB_DATABASE=yourDatabaseName
    
-   DB_USERNAME=dbusername
+   DB_USERNAME=yourDataBaseUserName
    
-   DB_PASSWORD=usernamepass
+   DB_PASSWORD=yourUserNamePass
 5) <code>make migrate</code>
 6) <code>make start</code>
    
