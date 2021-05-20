@@ -28,7 +28,7 @@ class UrlCheckTest extends TestCase
     }
     public function testStore(): void
     {
-        $fixturePath = 'tests/fixtures/testlpage.html';
+        $fixturePath = 'tests/fixtures/testpage.html';
         try {
             $fakeHtml = file_get_contents($fixturePath);
         } catch (\Exception $e) {
