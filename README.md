@@ -25,7 +25,7 @@ In console:
 1) <code>git clone https://github.com/BotServicePro/php-project-lvl3.git </code>
 2) <code>cd php-project-lvl3</code>
 3) <code>make setup</code>
-4) Make this settings in .env file in root directory:
+4) Edit this settings in .env file in root directory:
    
    DB_CONNECTION=pgsql
    
