@@ -47,8 +47,8 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ],
-        "phpcs": "phpcs --standard=PSR12",
-        "phpcbf": "phpcs --standard=PSR12",
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
         "phpunit": "phpunit",
         "test": "phpunit tests"
 
