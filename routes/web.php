@@ -57,8 +57,8 @@ Route::post('/urls', function (Request $request): Illuminate\Http\RedirectRespon
     $validatedUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
     if (DB::table('urls')->where('name', $validatedUrl)->exists()) {
         flash(__('validation.unique'))->warning();
-        $id = DB::table('urls')
-            ->where('name', '=', $validatedUrl)
+        $id = (int) DB::table('urls')
+            ->where('name', $validatedUrl)
             ->first()->id;
     } else {
         flash('Url was added!')->success();
