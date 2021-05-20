@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
-class ChecksTest extends TestCase
+class UrlCheckTest extends TestCase
 {
     /**
      * A basic feature test example.
