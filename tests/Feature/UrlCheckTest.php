@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Carbon\Carbon;
+use ErrorException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -28,16 +29,22 @@ class UrlCheckTest extends TestCase
     }
     public function testStore(): void
     {
-        $fakeHtml = file_get_contents('tests/fixtures/testpage.html');
+        $fixturePath = 'tests/fixtures/testpage.html';
+        try {
+            $fakeHtml = file_get_contents($fixturePath);
+        } catch (ErrorException $e) {
+            echo "Something wrong with fixture of fixture path: {$fixturePath}";
+            exit;
+        }
         $expectedData = [
-            'url_id' => 1,
+            'url_id' => $this->id,
             'status_code' => 200,
             'keywords' => 'php, php.ru, форум php, php программ?...',
             'description' => 'Форум PHP программистов, док?...',
             'h1' => 'Новости'
         ];
         Http::fake([$this->url => Http::response($fakeHtml, 200)]);
-        $response = $this->post(route('check.url', ['id' => $this->id]));
+        $response = $this->post(route('urls.checks.store', ['id' => $this->id]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('url_checks', $expectedData);
