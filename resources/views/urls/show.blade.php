@@ -27,7 +27,7 @@
     <main class="flex-grow-1">
     <div class="container-lg">
         <h2 class="mt-5 mb-3">Checks</h2>
-        <form action="{{ route('check.url', ['id' => $url->id]) }}" method="post">
+        <form action="{{ route('urls.checks.store', ['id' => $url->id]) }}" method="post">
             @csrf
             <input type="submit" class="btn btn-primary" value="Start check">
         </form>
