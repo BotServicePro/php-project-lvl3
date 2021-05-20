@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Carbon\Carbon;
-use ErrorException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -29,12 +28,12 @@ class UrlCheckTest extends TestCase
     }
     public function testStore(): void
     {
-        $fixturePath = 'tests/fixtures/testpage.html';
+        $fixturePath = 'tests/fixtures/testlpage.html';
         try {
             $fakeHtml = file_get_contents($fixturePath);
-        } catch (ErrorException $e) {
-            echo "Something wrong with fixture of fixture path: {$fixturePath}";
-            exit;
+        } catch (\Exception $e) {
+            echo "Something wrong with fixture or fixture path: {$e}";
+            return;
         }
         $expectedData = [
             'url_id' => $this->id,

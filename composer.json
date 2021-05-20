@@ -48,6 +48,7 @@
             "@php artisan key:generate --ansi"
         ],
         "phpcs": "phpcs --standard=PSR12",
+        "phpcbf": "phpcs --standard=PSR12",
         "phpunit": "phpunit",
         "test": "phpunit tests"
 
