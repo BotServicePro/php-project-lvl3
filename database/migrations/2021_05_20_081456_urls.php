@@ -28,6 +28,6 @@ class Urls extends Migration
      */
     public function down()
     {
-        Schema::drop('urls');
+        Schema::dropIfExists('urls');
     }
 }
