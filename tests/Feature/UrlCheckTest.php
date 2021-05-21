@@ -29,11 +29,9 @@ class UrlCheckTest extends TestCase
     public function testStore(): void
     {
         $fixturePath = 'tests/fixtures/testpage.html';
-        try {
-            $fakeHtml = (string) file_get_contents($fixturePath);
-        } catch (\Exception $e) {
-            echo "Something wrong with fixture or fixture path: {$e}";
-            return;
+        $fakeHtml = (string) file_get_contents($fixturePath);
+        if (!$fakeHtml) {
+            throw new \Exception("Woops, something wrong with fixtures or path: {$fakeHtml}");
         }
         $expectedData = [
             'url_id' => $this->id,
