@@ -55,7 +55,8 @@ Route::post('/urls', function (Request $request): Illuminate\Http\RedirectRespon
             ->withErrors($validator);
     }
     $validatedUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
-    if (DB::table('urls')->where('name', $validatedUrl)->exists()) {
+    $existigUrl = DB::table('urls')->where('name', $validatedUrl)->exists();
+    if ($existigUrl) {
         flash(__('validation.unique'))->warning();
         $id = DB::table('urls')
             ->where('name', $validatedUrl)
@@ -107,7 +108,7 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
             ->update(['updated_at' => Carbon::now()]);
         flash('Url was checked')->message();
     } catch (RequestException | ConnectionException $e) {
-            flash("Exception: {$e->getMessage()}")->error();
+        flash("Exception: {$e->getMessage()}")->error();
     }
     return redirect(route('urls.show', ['id' => $id]));
 })->name('urls.checks.store');
