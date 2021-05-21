@@ -41,3 +41,7 @@ In console:
 5) <code>make migrate</code>
 6) <code>make start</code>
    
+<code>make start</code> will start the webserver. By default it uses 8000 port. Be sure that your 8000 port is not used by any other program.
+
+If so, you can manually start the server by entering via console:
+<code>php -S 127.0.0.1:8080 -t public/</code>
