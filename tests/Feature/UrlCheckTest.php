@@ -17,14 +17,12 @@ class UrlCheckTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $url = "http://test.com";
-        $id = DB::table('urls')->insertGetId([
-            'name' => $url,
+        $this->url = "http://test.com";
+        $this->id = DB::table('urls')->insertGetId([
+            'name' => $this->url,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        $this->id = $id;
-        $this->url = $url;
     }
     public function testStore(): void
     {

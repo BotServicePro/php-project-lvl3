@@ -14,12 +14,11 @@ class UrlsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $id = DB::table('urls')->insertGetId([
+        $this->id = DB::table('urls')->insertGetId([
             'name' => "http://test.com",
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        $this->id = $id;
     }
 
     public function testIndex(): void
