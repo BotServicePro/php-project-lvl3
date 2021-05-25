@@ -52,7 +52,8 @@ Route::post('/urls', function (Request $request): Illuminate\Http\RedirectRespon
     if ($validator->fails()) {
         flash($errorMessage)->error();
         return redirect(route('main.page'))
-            ->withErrors($validator);
+            ->withErrors($validator)
+            ->withInput();
     }
     $validatedUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
     $existigUrl = DB::table('urls')->where('name', $validatedUrl)->exists();
@@ -79,7 +80,7 @@ Route::get('/urls/{id}', function ($id): Illuminate\View\View {
     abort_unless($url, 404);
     $checksData = DB::table('url_checks')
         ->where('url_id', '=', $id)
-        ->orderBy('updated_at', 'desc')
+        ->latest()
         ->get();
     return view('urls.show', compact('url', 'checksData'));
 })->name('urls.show');

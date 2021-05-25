@@ -14,7 +14,7 @@
                         <p class="lead">Check web pages for SEO</p>
                         <form action="{{ route('urls.store') }}" method="post" class="d-flex justify-content-center">
                             @csrf
-                                <input type="text" name="url[name]" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
+                                <input type="text" name="url[name]" value="{{ old('url.name') }}" class="form-control form-control-lg" placeholder="https://www.example.com">
                             <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">CHECK</button>
                         </form>
                     </div>
