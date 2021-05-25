@@ -20,8 +20,9 @@ use DiDom\Document;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function (): object {
-    return view('index');
+Route::get('/', function (Request $request): object {
+    $url = $request->old('url', ['name' => null]);
+    return view('index', compact('url'));
 })->name('main.page');
 
 Route::get('/urls', function (): object {
