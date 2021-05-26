@@ -41,15 +41,29 @@ Route::get('/urls', function (): object {
 
 
 Route::post('/urls', function (Request $request): Illuminate\Http\RedirectResponse {
-    $url = mb_strtolower($request->input('url')['name']);
-    $parsedUrl = parse_url($url);
-    $rules = [
-        'url.name' => 'bail|required|url|max:100'
-    ];
-    $validator = Validator::make($request->all('url'), $rules);
+    $url = $request->input('url');
+    $parsedUrl = parse_url($url['name']);
+//    $rules = [
+//        'url.name' => 'bail|required|url|max:100'
+//    ];
+    //$validator = Validator::make($request->all('url'), $rules);
+    $validator = Validator::make($url, [
+        'name' => 'required|url|max:100',
+    ]);
+
+
     $errorMessage = $validator
         ->errors()
-        ->first('url.name');
+        ->first('name');
+
+
+//    dump($parsedUrl);
+//    dump($validator->fails());
+//    dump($url);
+//    dump($request->all('url'));
+//    dump($validator);
+//    dump($errorMessage);
+//    exit;
     if ($validator->fails()) {
         flash($errorMessage)->error();
         return redirect(route('main.page'))

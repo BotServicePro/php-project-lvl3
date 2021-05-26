@@ -42,4 +42,11 @@ class UrlsTest extends TestCase
         $response->assertRedirect(route('urls.show', ['id' => 2]));
         $this->assertDatabaseHas('urls', $urlData);
     }
+
+    public function testEmptyUrlStore(): void
+    {
+        $urlData = ['name' => ''];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $response->assertSessionHasErrors('name');
+    }
 }
