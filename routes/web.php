@@ -39,7 +39,6 @@ Route::get('/urls', function (): object {
     return view('urls.index', compact('urls', 'lastChecks'));
 })->name('urls.index');
 
-
 Route::post('/urls', function (Request $request): Illuminate\Http\RedirectResponse {
     $url = $request->input('url');
     $parsedUrl = parse_url($url['name']);
@@ -49,7 +48,6 @@ Route::post('/urls', function (Request $request): Illuminate\Http\RedirectRespon
     $errorMessage = $validator
         ->errors()
         ->first('name');
-
     if ($validator->fails()) {
         flash($errorMessage)->error();
         return redirect(route('main.page'))
