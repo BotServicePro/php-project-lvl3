@@ -62,7 +62,7 @@ class UrlsTest extends TestCase
 
     public function testExistsUrlStore(): void
     {
-        $urlData = ['name' => "http://test.com"]; // already exists url
+        $urlData = ['name' => "http://test.com"];
         $checkData = ['id', 2];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $response->assertRedirect(route('urls.show', ['id' => 1]));
