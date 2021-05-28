@@ -92,7 +92,7 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
         $document = new Document($response->body());
         $h1 = optional($document->first('h1'))->text();
         if (strlen($h1) > 200) {
-            $h1 = substr($h1, '0', '200');
+            $h1 = substr($h1, 0, 200);
         }
         $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
         if ($keywords === null) {
