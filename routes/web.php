@@ -92,7 +92,13 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
         $document = new Document($response->body());
         $h1 = optional($document->first('h1'))->text();
         $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
+        if ($keywords === null) {
+            $keywords = optional($document->first('meta[name=Keywords]'))->getAttribute('content');
+        }
         $description = optional($document->first('meta[name=description]'))->getAttribute('content');
+        if ($description === null) {
+            $description = optional($document->first('meta[name=Description]'))->getAttribute('content');
+        }
         DB::table('url_checks')
             ->insert([
                 'url_id' => $id,
