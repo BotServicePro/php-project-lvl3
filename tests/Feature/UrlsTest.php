@@ -47,6 +47,25 @@ class UrlsTest extends TestCase
     {
         $urlData = ['name' => ''];
         $response = $this->post(route('urls.store'), ['url' => $urlData]);
-        $response->assertSessionHasErrors('name');
+        $response->assertSessionHasErrors('name', __('validation.required'));
+    }
+
+    public function testTooLongUrlStore(): void
+    {
+        $tooLongDomain = str_repeat('domain', 20);
+        $urlData = [
+            'name' => "http://{$tooLongDomain}.com"
+        ];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $response->assertSessionHasErrors('name', __('validation.string'));
+    }
+
+    public function testExistsUrlStore(): void
+    {
+        $urlData = ['name' => "http://test.com"]; // already exists url
+        $checkData = ['id', 2];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $response->assertRedirect(route('urls.show', ['id' => 1]));
+        $this->assertDatabaseMissing('urls', $checkData);
     }
 }
