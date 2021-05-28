@@ -91,6 +91,11 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
         $response = Http::get($url);
         $document = new Document($response->body());
         $h1 = optional($document->first('h1'))->text();
+        if(strlen($h1) > 200) {
+            $h1 = substr($h1, '0', '70');
+        }
+
+
         $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
         if ($keywords === null) {
             $keywords = optional($document->first('meta[name=Keywords]'))->getAttribute('content');
@@ -99,6 +104,12 @@ Route::post('urls/{id}/checks', function ($id): Illuminate\Http\RedirectResponse
         if ($description === null) {
             $description = optional($document->first('meta[name=Description]'))->getAttribute('content');
         }
+
+
+//        dump($h1);
+//        dump($keywords);
+//        dump($description);
+//        exit;
         DB::table('url_checks')
             ->insert([
                 'url_id' => $id,

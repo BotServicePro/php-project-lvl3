@@ -18,8 +18,8 @@ class UrlChecks extends Migration
             $table->foreignId('url_id')->constrained('urls');
             $table->integer('status_code')->nullable();
             $table->string('h1')->nullable();
-            $table->string('keywords')->nullable();
-            $table->string('description')->nullable();
+            $table->text('keywords')->nullable();
+            $table->text('description')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('created_at')->nullable();
         });
