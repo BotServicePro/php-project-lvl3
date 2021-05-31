@@ -47,8 +47,8 @@
                         <td>{{ $check->id }}</td>
                         <td>{{ $check->status_code }}</td>
                         <td>{{ Str::limit($check->h1, 30, ' ...') }}</td>
-                        <td>{{ Str::limit($check->keywords, 50, ' ...') }}</td>
-                        <td>{{ Str::limit($check->description, 50, ' ...') }}</td>
+                        <td>{{ Str::limit($check->keywords, 40, ' ...') }}</td>
+                        <td>{{ Str::limit($check->description, 40, ' ...') }}</td>
                         <td>{{ $check->updated_at }}</td>
                     </tr>
                 @endforeach
@@ -57,3 +57,4 @@
     </div>
     </main>
 @endsection
+
