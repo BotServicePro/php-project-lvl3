@@ -14,6 +14,9 @@ setup:
 migrate:
 	php artisan migrate
 
+migrate-reset:
+	php artisan migrate:reset
+
 console:
 	php artisan tinker
 
