@@ -11,6 +11,7 @@ Simple laravel application for web page analyze for SEO
 
 ### Requrements
 <li> PHP ^7.3
+<li> Laravel 8.x
 <li> Composer
 <li> SQLite for testing
 <li> Database: PostgreSQL
