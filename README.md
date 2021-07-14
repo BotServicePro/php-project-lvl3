@@ -15,6 +15,7 @@ Simple laravel application for web page analyze for SEO.
 <li> Composer
 <li> SQLite for testing
 <li> Database: PostgreSQL
+<li> PHPUnit
 <li> <a href="https://devcenter.heroku.com/articles/heroku-cli#download-and-install">Heroku CLI</a>
 
 ### <a href="http://karakin-php-project-lvl3.herokuapp.com/">Demo on Heroku</a>
