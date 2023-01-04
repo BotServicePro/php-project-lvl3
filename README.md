@@ -16,8 +16,6 @@ Simple laravel application for web page analyze for SEO.
 <li> PHPUnit
 <li> <a href="https://devcenter.heroku.com/articles/heroku-cli#download-and-install">Heroku CLI</a>
 
-### <a href="http://karakin-php-project-lvl3.herokuapp.com/">Demo on Heroku</a>
-
 ### Setup
 
 In console:
